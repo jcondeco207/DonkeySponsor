@@ -1,0 +1,31 @@
+FROM node:latest as builder
+
+WORKDIR /
+
+RUN pwd
+
+COPY SOCPlatformBackend/frontend_manager/ SOCPlatformBackend/frontend_manager/
+
+RUN cd SOCPlatformBackend/frontend_manager
+RUN cd SOCPlatformBackend/frontend_manager && npm ci
+RUN cd SOCPlatformBackend/frontend_manager && npm run build
+
+COPY . .
+
+FROM python:3.11-slim-bookworm
+
+WORKDIR /
+
+COPY --from=builder SOCPlatformBackend/ .
+
+RUN cd SOCPlatformBackend/
+
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+RUN pip install -U channels["daphne"]
+RUN export ENV_FILE_NAME=.env
+
+RUN apt-get -y update
+RUN apt-get -y install curl
+
+EXPOSE 8000

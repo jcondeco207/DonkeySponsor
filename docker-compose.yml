@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+
+  donkey_sponsor_db:
+    container_name: donkey_sponsor_backend
+    image: postgres
+    stdin_open: true
+    tty: true
+    volumes:
+      - ds_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: DonkeySponsorBackend
+      POSTGRES_USER: $"{POSTGRES_USER}"
+      POSTGRES_PASSWORD: $"{POSTGRES_PSW}"
+    ports:
+      - '6379'
+    networks:
+      - donkey_sponsor_network
+    
+  donkey_sponsor_backend:
+    container_name: donkey_sponsor_backend
+    build: 
+      context: ./DonkeySponsorBackend
+      dockerfile: Dockerfile.server
+    command: bash build.sh
+    ports:
+      - '8000:8000'
+    stdin_open: true
+    tty: true
+    depends_on:
+      - donkey_sponsor_db
+    networks:
+      - donkey_sponsor_network
+networks:
+  donkey_sponsor_network:
+
+volumes:
+  ds_data:

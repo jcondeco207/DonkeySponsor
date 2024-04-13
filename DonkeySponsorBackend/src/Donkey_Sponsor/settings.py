@@ -1,5 +1,10 @@
 from pathlib import Path
 from datetime import timedelta
+import os
+from dotenv import load_dotenv
+
+envfile = os.environ.get('ENV_FILE_NAME', '.env')
+load_dotenv(envfile)
 
 #==================================| Django |==================================#
 
@@ -107,11 +112,19 @@ TEMPLATES = [
 
 #==================================| Databases |==================================#
 
+dbname = str(os.getenv('POSTGRES_DB'))
+dbhost = str(os.getenv('POSTGRES_HOST'))
+dbport = str(os.getenv('POSTGRES_PORT'))
+
 # Database
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": dbname,
+        "USER": str(os.getenv('POSTGRES_USER')),
+        "PASSWORD": str(os.getenv('POSTGRES_PSW')),
+        "HOST": dbhost,
+        "PORT": dbport
     }
 }
 
