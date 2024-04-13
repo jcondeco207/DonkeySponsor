@@ -1,50 +1,43 @@
 from django.utils import timezone
 from django.db import models
-from pygments.lexers import get_all_lexers
-from pygments.styles import get_all_styles
 import uuid
 from django.contrib.auth.models import AbstractUser
 from Donkey_Sponsor.settings import AUTH_USER_MODEL
-from axes.models import AccessAttempt
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
 class MustReset(models.Model):
-    id = models.UUIDField(  primary_key=True, 
-                            unique=True, 
-                            default=uuid.uuid4, 
+    id = models.UUIDField(  primary_key=True,
+                            unique=True,
+                            default=uuid.uuid4,
                             editable=False)
     createdAt = models.DateTimeField(auto_now_add=True)
 
-    requestedBy = models.ForeignKey(    AUTH_USER_MODEL, 
-                                        related_name='must_reset', 
-                                        on_delete=models.CASCADE, 
+    requestedBy = models.ForeignKey(    AUTH_USER_MODEL,
+                                        related_name='must_reset',
+                                        on_delete=models.CASCADE,
                                         null=True )
-    
-    
     class Meta:
         ordering = ['createdAt']
-        
+
 class Role(models.Model):
-    
     RolesInPlatform = (
         ("DonkeyAdmin","Donkey Administrator"),
         ("DonkeyGodFather", "DonkeyGodFather"),
         ("DonkeyProvider", "DonkeyProvider"))
 
-    id = models.UUIDField(primary_key=True, 
-                          default=uuid.uuid4, 
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
                           editable=False)
-    
+
     name = models.CharField(
         choices=RolesInPlatform,
         default='Observer',
         unique=True
     )
-    
-    def __str__(self):
-        return self.name
-    
+
+
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
@@ -68,21 +61,17 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractUser):
-    id = models.UUIDField(primary_key=True, 
-                          default=uuid.uuid4, 
+    id = models.UUIDField(primary_key=True,
+                          default=uuid.uuid4,
                           editable=False)
     email = models.EmailField(unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
-    role = models.ForeignKey(   'users_management.Role', 
-                                related_name='users', 
+    role = models.ForeignKey(  'users_management.Role',
+                                related_name='users',
                                 on_delete=models.CASCADE)
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
-
     objects = CustomUserManager()
-    
-    def __str__(self):
-        return self.email

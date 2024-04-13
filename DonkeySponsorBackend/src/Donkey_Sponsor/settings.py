@@ -6,9 +6,9 @@ from dotenv import load_dotenv
 envfile = os.environ.get('ENV_FILE_NAME', '.env')
 load_dotenv(envfile)
 
-#==================================| Django |==================================#
-
 AUTH_USER_MODEL = 'users_management.User'
+
+#==================================| Django |==================================#
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -219,6 +219,8 @@ SPECTACULAR_SETTINGS = {
     'TAGS': [  # tags to categorize API classes
     ],
 }
+
+
 
 #==================================| Settings needed for React |==================================#
 
