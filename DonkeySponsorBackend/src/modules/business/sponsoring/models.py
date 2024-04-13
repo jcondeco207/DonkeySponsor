@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+from Donkey_Sponsor.settings import AUTH_USER_MODEL
 
 class Animal(models.Model):
     id = models.UUIDField( primary_key=True,
@@ -64,3 +65,21 @@ class ActivityImage(models.Model):
     
     image = models.ImageField(upload_to='uploads/',
                               null=True)
+    
+class DonkeyOfSponsor(models.Model):
+    id = models.UUIDField( primary_key=True,
+                           unique=True,
+                           default=uuid.uuid4,
+                           editable=False) 
+    
+    user = models.ForeignKey(AUTH_USER_MODEL,
+                              related_name='donkey_of_sponsor',
+                              on_delete=models.CASCADE)
+    
+    animal = models.ForeignKey('sponsoring.Animal',
+                               related_name='donkey_of_sponsor',
+                               on_delete=models.CASCADE)
+
+    createdAt = models.DateTimeField(auto_now=True)
+
+    status = models.BooleanField()

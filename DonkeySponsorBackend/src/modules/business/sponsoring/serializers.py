@@ -41,3 +41,10 @@ class ActivityImageSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return super().to_representation(instance)
     
+class DonkeyOfSponsorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.DonkeyOfSponsor
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        return super().to_representation(instance)
