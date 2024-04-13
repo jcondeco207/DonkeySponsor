@@ -9,9 +9,9 @@ services:
     volumes:
       - ds_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB: DonkeySponsorBackend
-      - POSTGRES_DB: $"{POSTGRES_USER}"
-      - POSTGRES_DB: $"{POSTGRES_PSW}"
+      POSTGRES_DB: DonkeySponsorBackend
+      POSTGRES_USER: $"{POSTGRES_USER}"
+      POSTGRES_PASSWORD: $"{POSTGRES_PSW}"
     ports:
       - '6379'
     networks:
@@ -32,7 +32,7 @@ services:
     networks:
       - donkey_sponsor_network
 networks:
-  - donkey_sponsor_network
+  donkey_sponsor_network:
 
 volumes:
   ds_data:
