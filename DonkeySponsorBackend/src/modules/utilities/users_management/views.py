@@ -227,24 +227,11 @@ class UserList(generics.ListCreateAPIView):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-    # def check_permissions(self, request):
-    #     if request.method == 'GET':
-    #         permission_classes = [permissions.IsAuthenticated]
-    #     elif request.method == 'POST':
-    #         permission_classes = [ usersPermissions.IsDonkeyAdmin | usersPermissions.IsOrgAdministrator]
-
-    #     for permission_class in permission_classes:
-    #         permission = permission_class()
-    #         if not permission.has_permission(request, self):
-    #             self.permission_denied(
-    #                 request, message=getattr(permission, 'message', None)
-    #             )
-
 @extend_schema(tags=["Manage - Users"])
 class RolesList(generics.ListAPIView):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
-    # permission_classes = [permissions.IsAdminUser | usersPermissions.IsAdministrator]
+    permission_classes = [permissions.IsAdminUser]
     authentication_classes = [TokenAuthentication, authentication.SessionAuthentication]
     filter_backends = [filters.SearchFilter]
 
