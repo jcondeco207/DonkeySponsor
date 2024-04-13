@@ -2,13 +2,11 @@ FROM node:latest as builder
 
 WORKDIR /
 
-RUN pwd
+COPY src/frontend/ src/frontend/
 
-COPY SOCPlatformBackend/frontend_manager/ SOCPlatformBackend/frontend_manager/
-
-RUN cd SOCPlatformBackend/frontend_manager
-RUN cd SOCPlatformBackend/frontend_manager && npm ci
-RUN cd SOCPlatformBackend/frontend_manager && npm run build
+RUN cd src/frontend
+RUN cd src/frontend && npm ci
+RUN cd src/frontend && npm run build
 
 COPY . .
 
@@ -16,9 +14,9 @@ FROM python:3.11-slim-bookworm
 
 WORKDIR /
 
-COPY --from=builder SOCPlatformBackend/ .
+COPY --from=builder src/ .
 
-RUN cd SOCPlatformBackend/
+RUN cd src/
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
