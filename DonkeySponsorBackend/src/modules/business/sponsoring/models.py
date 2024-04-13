@@ -21,10 +21,11 @@ class AnimalImage(models.Model):
                             editable=False)
     
     animal = models.ForeignKey('sponsoring.Animal',
-                                related_name='animal',
+                                related_name='animal_image',
                                 on_delete=models.CASCADE)
     
-    image = models.ImageField()
+    image = models.ImageField(upload_to='uploads/',
+                              null=True)
 
 class AnimalActivity(models.Model):
     id = models.UUIDField( primary_key=True,
@@ -33,7 +34,7 @@ class AnimalActivity(models.Model):
                            editable=False)
     
     animal = models.ForeignKey('sponsoring.Animal',
-                                related_name='animal',
+                                related_name='animal_activity',
                                 on_delete=models.CASCADE)
     
     activity = models.ForeignKey('Activity',
@@ -58,7 +59,8 @@ class ActivityImage(models.Model):
                            editable=False) 
     
     activity = models.ForeignKey('sponsoring.Activity',
-                            related_name='activity',
+                            related_name='activity_image',
                             on_delete=models.CASCADE)
     
-    image = models.ImageField()
+    image = models.ImageField(upload_to='uploads/',
+                              null=True)
