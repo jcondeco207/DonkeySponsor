@@ -1,0 +1,13 @@
+**/migrations/
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+frontend/node_modules
+frontend/npm-debug.log
+frontend/build
+.dockerignore
+dockerfile
+dockerfile.prod
