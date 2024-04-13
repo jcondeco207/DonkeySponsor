@@ -8,6 +8,8 @@ load_dotenv(envfile)
 
 #==================================| Django |==================================#
 
+AUTH_USER_MODEL = 'users_management.User'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -35,6 +37,9 @@ INSTALLED_APPS = [
     "knox",
     "modules.api",
     "modules.utilities.core",
+    "modules.utilities.users_management",
+    "modules.business.local_management",
+    "modules.business.sponsoring",
 
     #TFA
     'django_otp',
@@ -47,6 +52,7 @@ INSTALLED_APPS = [
     'two_factor.plugins.yubikey',  # <- for yubikey capability.
     'otp_yubikey',
     'two_factor.plugins.webauthn',
+    'axes',
 
     #graphql
     "graphene_django"
@@ -92,6 +98,19 @@ REST_KNOX = {
   'AUTH_HEADER_PREFIX': 'Bearer'
 }
 
+
+#==================================| Axes |==================================#
+AXES_DATABASE_MODEL = 'user_sessions.AccessAttempt'
+AXES_COOLOFF_TIME = 0.0833
+AXES_LOCK_OUT_AT_FAILURE = True
+AXES_RESET_ON_SUCCESS = False
+AXES_LOCKOUT_PARAMETERS = ["ip_address", "username"]
+AXES_RESET_ON_SUCCESS = False
+AXES_INCREMENTAL_TIME = 2
+AXES_FAILURE_LIMIT = 5
+SILENCED_SYSTEM_CHECKS = ['axes.W003'] # Axes dummy warning
+
+ROOT_URLCONF = "Donkey_Sponsor.urls"
 
 #==================================| Templates |==================================#
 TEMPLATES = [
