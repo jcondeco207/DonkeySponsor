@@ -16,6 +16,10 @@ from . import models
 from . import serializers
 from rest_framework import filters
 
+# List dunkeys that yoy sponsorize
+# see dunkeys that you sponsorize
+# see dunkeys that you sponsorize activities
+# list dunkeys that you dont sponsorize
 
 class AnimalListCreate(generics.ListCreateAPIView):
     queryset = models.Animal.objects.all()

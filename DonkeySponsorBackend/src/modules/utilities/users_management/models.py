@@ -36,9 +36,6 @@ class Role(models.Model):
         unique=True
     )
 
-
-
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         if not email:
