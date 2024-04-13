@@ -19,6 +19,8 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions, status, generics
 from .models import MustReset, User, Role
 from .serializers import RoleSerializer, UserSerializer, CreateUserSerializer
+from . import permissions as usersPermissions
+
 # Methods to reenable users blocked by axes
 # Can use ip or username
 @extend_schema(tags=["Manage - Users"])
@@ -77,7 +79,7 @@ class UpgradeToAdminView(APIView):
 
 @extend_schema(tags=["Manage - Users"])
 class ChangeUserRole(APIView):
-    # permission_classes = [permissions.IsAdminUser | usersPermissions.IsSOCAdministrator]
+    permission_classes = [permissions.IsAdminUser |  usersPermissions.IsDonkeyAdmin]
     authentication_classes = [TokenAuthentication, authentication.SessionAuthentication]
 
     def allowChange(self, userRole, oldRole, role):
@@ -157,7 +159,7 @@ class BlockUser(APIView):
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [usersPermissions.IsSOCAdministrator | usersPermissions.IsOrgAdministrator]
+    permission_classes = [ permissions.IsAuthenticated]
     authentication_classes = [TokenAuthentication, authentication.SessionAuthentication]
     filter_backends = [filters.SearchFilter]
 
@@ -229,7 +231,7 @@ class UserList(generics.ListCreateAPIView):
     #     if request.method == 'GET':
     #         permission_classes = [permissions.IsAuthenticated]
     #     elif request.method == 'POST':
-    #         permission_classes = [usersPermissions.IsSOCAdministrator | usersPermissions.IsOrgAdministrator]
+    #         permission_classes = [ usersPermissions.IsDonkeyAdmin | usersPermissions.IsOrgAdministrator]
 
     #     for permission_class in permission_classes:
     #         permission = permission_class()
