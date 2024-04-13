@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"
+      media="screen">
+    <script defer src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+      html {
+        height: 100%;
+        margin: 0;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 100vw 100vh;
+        background-attachment: fixed;
+        justify-content: center;
+      }
+
+      .container {
+        background-color: white;
+        border-radius: 5px;
+        padding-inline: 1.5em;
+        padding-block: 2.5em;
+        max-width: 30%;
+        box-shadow: 0px 0px 41px 0px black;
+        transition: all 500ms;
+      }
+
+      .container:hover {
+        transform: scale(1.02);
+        box-shadow: 0px 0px 41px 0px #a1e9ff;
+      }
+
+      .container:active {
+        transform: scale(1.02);
+        box-shadow: 0px 0px 41px 0px #a1e9ff;
+      }
+    </style>
+    {% block extra_media %}{% endblock %}
+  </head>
+
+  <body>
+
+    {% block content_wrapper %}
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+    {% endblock %}
+  </body>
+
+</html>
