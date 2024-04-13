@@ -35,7 +35,7 @@ def index_view(request):
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    
+
     # Two factor auth and sessions urls
     path('', include(tf_urls)),
     path('', include('user_sessions.urls', 'user_sessions')),
@@ -47,6 +47,9 @@ urlpatterns = [
 
     # API
     path('api/', include('modules.api.urls')),
+    path('api/', include('modules.business.local_management.urls')),
+    path('api/', include('modules.business.sponsoring.urls')),
+    path('api/', include('modules.utilities.users_management.urls')),
 
     # React
     path('', login_required(index_view), name='index'),
