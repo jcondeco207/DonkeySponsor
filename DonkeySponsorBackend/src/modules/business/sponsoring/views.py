@@ -1,20 +1,13 @@
-import json
-
-from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 from knox.auth import TokenAuthentication
-from django.http import JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.decorators.http import require_POST
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework import generics, status
-from . import utils
 from . import models
 from . import serializers
 from rest_framework import filters
+from django.db.models import Q
 
 #===================| Donkeys |===================#
 
@@ -22,7 +15,20 @@ from rest_framework import filters
 class AnimalListCreate(generics.ListCreateAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
+    filter_backends = [filters.SearchFilter]
 
+    def get_queryset(self):
+        search_param = self.request.query_params.get('search', "")
+        if search_param:
+            queryset = queryset.filter(
+                Q(name__icontains=search_param) |
+                Q(local_name__icontains=search_param)
+            )
+        return queryset
+    
+class AnimalDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Animal.objects.all()
+    serializer_class = serializers.AnimalSerializer
 
 @extend_schema(tags=["API - Sponsoring"])
 class SponsoredDonkeys(generics.ListAPIView):
@@ -66,7 +72,6 @@ class NotMyDonkeys(generics.ListCreateAPIView):
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR, data={'error': f'{e}'})
         
     
-
 #=================| Donkey Business |=================#
 
 
