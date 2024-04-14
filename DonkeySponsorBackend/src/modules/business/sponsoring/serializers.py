@@ -20,32 +20,20 @@ class AnimalSerializer(serializers.ModelSerializer):
             models.AnimalImage.objects.create(animal=animal, **animal_image_data)
         return animal
     
-class AnimalActivity(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        sponsorCount = models.DonkeyOfSponsor.objects.filter(animal=instance).count()
+        representation['sponsor_count'] = sponsorCount
+        return representation
+    
+class AnimalActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.AnimalActivity
         fields = '__all__'
 
     def to_representation(self, instance):
         return super().to_representation(instance)
-    
-class ActivitySerializer(serializers.ModelSerializer):
-    activity_image = AnimalImageSerializer(many=True, required=False)
 
-    class Meta:
-        model = models.AnimalActivity
-        fields = '__all__'
-
-    class Meta:
-        model = models.Animal
-        fields = ['id', 'description', 'status', 'lastUpdatedAt', 'createdAt', 'activity_image']
-
-    def create(self, validated_data):
-        activity_images_data = validated_data.pop('activity_image')
-        activity = models.Activity.objects.create(**validated_data)
-        for activity_image_data in activity_images_data:
-            models.ActivityImage.objects.create(activity=activity, **activity_image_data)
-        return activity
-    
 class ActivityImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ActivityImage
@@ -53,6 +41,26 @@ class ActivityImageSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return super().to_representation(instance)
+
+class ActivitySerializer(serializers.ModelSerializer):
+    activity_image = ActivityImageSerializer(many=True, required=False)
+    donkey_id = serializers.UUIDField()
+
+    class Meta:
+        model = models.Activity
+        fields = ['id', 'description', 'status', 'lastUpdatedAt', 'createdAt', 'activity_image', 'donkey_id']
+
+
+    def create(self, validated_data):
+        activity_images_data = validated_data.pop('activity_image')
+        donkey_id = validated_data.pop('donkey_id')
+        activity = models.Activity.objects.create(**validated_data)
+        animal_activity = models.AnimalActivity.objects.create(animal_id=donkey_id, activity=activity)
+        for activity_image_data in activity_images_data:
+            models.ActivityImage.objects.create(activity=activity, **activity_image_data)
+        return activity
+    
+
     
 class DonkeyOfSponsorSerializer(serializers.ModelSerializer):
     class Meta:
