@@ -33,6 +33,10 @@ schema_view = get_schema_view(
 def index_view(request):
     return render(request, 'dist/index.html')
 
+admin.site.site_title = "Donkey Sponsor - Admin"
+admin.site.site_header = "Donkey Sponsor - Admin"
+admin.site.index_title = "Cloud Computing - 2023/2024"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
 
