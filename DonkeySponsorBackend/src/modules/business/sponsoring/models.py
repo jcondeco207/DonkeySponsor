@@ -80,6 +80,8 @@ class DonkeyOfSponsor(models.Model):
                                related_name='donkey_of_sponsor',
                                on_delete=models.CASCADE)
 
+    value = models.FloatField()
+    
     createdAt = models.DateTimeField(auto_now=True)
 
     status = models.BooleanField()

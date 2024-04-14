@@ -15,3 +15,10 @@ from . import utils
 from . import models
 from . import serializers
 from rest_framework import filters
+
+
+# -> Listar locais
+# -> Listar burros de um local 
+# -> Criar/Associar burros (donkey provider do local)
+# -> publicar atividades dos burros
+# -> Contar quantos padrinhos tem um burro
