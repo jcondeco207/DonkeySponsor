@@ -15,25 +15,30 @@ from django.db.models import Q
 class AnimalListCreate(generics.ListCreateAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
     filter_backends = [filters.SearchFilter]
 
     def get_queryset(self):
         search_param = self.request.query_params.get('search', "")
+        queryset = models.Animal.objects.all()
         if search_param:
             queryset = queryset.filter(
                 Q(name__icontains=search_param) |
                 Q(local_name__icontains=search_param)
             )
+
         return queryset
     
 class AnimalDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
 
 @extend_schema(tags=["API - Sponsoring"])
 class SponsoredDonkeys(generics.ListAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
 
     def get_queryset(self):
         user = self.request
@@ -45,11 +50,13 @@ class SponsoredDonkeys(generics.ListAPIView):
 class NotMyDonkeys(generics.ListCreateAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
 
     def get_queryset(self):
-        user = self.request
+        user = self.request.user
+        print(user)
         sponsoredIds = models.DonkeyOfSponsor.objects.filter(user=user).values_list('animal', flat=True)
-        return models.Animal.exclude(id__in=sponsoredIds)
+        return models.Animal.objects.exclude(id__in=sponsoredIds)
     
     def create(self, request, *args, **kwargs):
         donkeyId = request.data.get('donkey_id', None)
@@ -79,16 +86,18 @@ class NotMyDonkeys(generics.ListCreateAPIView):
 class AllActivities(generics.ListAPIView):
     queryset = models.Activity.objects.all()
     serializer_class = serializers.ActivitySerializer
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
 
 # Global view of my donkeys activities
 @extend_schema(tags=["API - Sponsoring"])
 class SponsoredDonkeys(generics.ListAPIView):
     queryset = models.Activity.objects.all()
     serializer_class = serializers.ActivitySerializer
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
 
     def get_queryset(self):
-        user = self.request
+        user = self.request.user
         sponsoredIds = models.DonkeyOfSponsor.objects.filter(user=user).values_list('animal', flat=True)
-        activitiesIds = models.AnimalActivity.filter(animal__in=sponsoredIds).values_list('activity', flat=True)
-        queryset = models.Activity.filter(id__in=activitiesIds)
+        activitiesIds = models.AnimalActivity.objects.filter(animal__in=sponsoredIds).values_list('activity', flat=True)
+        queryset = models.Activity.objects.filter(id__in=activitiesIds)
         return queryset
