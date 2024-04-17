@@ -37,3 +37,14 @@ Using the Google Cloud Price Estimator we did calculation for all three solution
 + [Cloud Run](/Pricing/cloudRunPricing.csv)
 
 For this WebApp the product that we choose was Cloud Run for the low pricing when comparing with the other products.
+
+## Frontend Pages
+
++ Login
++ Home Page (Opened to all users)
++ Farm management Page (Opened to produtors)
+    + Post news of donkey
+    + Add donkeys
+    + Delete donkeys
++ My sponsored donkeys page (Opened to sponsors)
++ Sponsored news (Opened to sponsors)
