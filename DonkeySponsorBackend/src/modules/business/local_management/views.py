@@ -15,7 +15,6 @@ from rest_framework import permissions
 
 class ListLocals(generics.ListCreateAPIView):
     queryset = models.Local.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     serializer_class = serializers.LocalSerializer
     filter_backends = [filters.SearchFilter]
