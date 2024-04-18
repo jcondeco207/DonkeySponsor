@@ -10,10 +10,13 @@ from rest_framework import filters
 from django.db.models import Q
 from modules.business.sponsoring import models as SponsorModels
 from modules.business.sponsoring import serializers as SponsorSerializers
-from modules.utilities.users_management import permissions
+from modules.utilities.users_management import permissions as donkeyPermissions
+from rest_framework import permissions
 
 class ListLocals(generics.ListCreateAPIView):
     queryset = models.Local.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
     serializer_class = serializers.LocalSerializer
     filter_backends = [filters.SearchFilter]
 
@@ -25,7 +28,7 @@ class CreateActivity(generics.CreateAPIView):
     queryset = SponsorModels.Activity.objects.all()
     serializer_class = SponsorSerializers.ActivitySerializer
     authentication_classes = [TokenAuthentication, SessionAuthentication]
-    permission_classes = [permissions.IsDonkeyProvider, permissions.IsLocalOwner]
+    permission_classes = [donkeyPermissions.IsDonkeyProvider, donkeyPermissions.IsLocalOwner]
 
     def perform_create(self, serializer):
         serializer.save()
