@@ -43,6 +43,7 @@ For this WebApp the product that we choose was Cloud Run for the low pricing whe
 + Login
 + Home Page (Opened to all users)
 + Farm management Page (Opened to produtors)
+    + List donkeys
     + Post news of donkey
     + Add donkeys
     + Delete donkeys
