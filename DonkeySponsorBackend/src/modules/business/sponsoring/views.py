@@ -8,6 +8,7 @@ from . import models
 from . import serializers
 from rest_framework import filters
 from django.db.models import Q
+from modules.utilities.users_management import permissions as usersPermissions
 
 #===================| Donkeys |===================#
 
@@ -39,6 +40,7 @@ class SponsoredDonkeys(generics.ListAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
     authentication_classes = [TokenAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request
@@ -51,6 +53,7 @@ class NotMyDonkeys(generics.ListCreateAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
     authentication_classes = [TokenAuthentication, SessionAuthentication]
+    permission_classes = [usersPermissions.IsDonkeyGodFather]
 
     def get_queryset(self):
         user = self.request.user
@@ -87,6 +90,7 @@ class AllActivities(generics.ListAPIView):
     queryset = models.Activity.objects.all()
     serializer_class = serializers.ActivitySerializer
     authentication_classes = [TokenAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticated]
 
 # Global view of my donkeys activities
 @extend_schema(tags=["API - Sponsoring"])
@@ -94,6 +98,7 @@ class SponsoredDonkeys(generics.ListAPIView):
     queryset = models.Activity.objects.all()
     serializer_class = serializers.ActivitySerializer
     authentication_classes = [TokenAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
