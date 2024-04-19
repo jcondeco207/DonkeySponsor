@@ -133,15 +133,17 @@ TEMPLATES = [
 
 dbname = str(os.getenv('POSTGRES_DB'))
 dbhost = str(os.getenv('POSTGRES_HOST'))
-dbport = str(os.getenv('POSTGRES_PORT'))
+dbport = os.getenv('POSTGRES_PORT')
+dbuser = str(os.getenv('POSTGRES_USER'))
+dbpassword = str(os.getenv('POSTGRES_PSW'))
 
 # Database
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": dbname,
-        "USER": str(os.getenv('POSTGRES_USER')),
-        "PASSWORD": str(os.getenv('POSTGRES_PSW')),
+        "USER": dbuser,
+        "PASSWORD": dbpassword,
         "HOST": dbhost,
         "PORT": dbport
     }
