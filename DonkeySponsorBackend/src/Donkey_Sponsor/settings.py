@@ -173,6 +173,9 @@ dbhost = str(os.getenv('POSTGRES_HOST'))
 dbport = os.getenv('POSTGRES_PORT')
 dbuser = str(os.getenv('POSTGRES_USER'))
 dbpassword = str(os.getenv('POSTGRES_PSW'))
+dbport = os.getenv('POSTGRES_PORT')
+dbuser = str(os.getenv('POSTGRES_USER'))
+dbpassword = str(os.getenv('POSTGRES_PSW'))
 
 # Database
 if os.getenv('ISGCP', 'true') == 'false':

@@ -14,7 +14,7 @@ services:
   donkey_sponsor_backend:
     container_name: donkey_sponsor_backend
     build: 
-      context: ./DonkeySponsorBackend
+      context: ./DonkeySponsorBackend/src
       dockerfile: Dockerfile.server
     command: bash build.sh
     ports:

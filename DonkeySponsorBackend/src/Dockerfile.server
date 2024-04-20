@@ -2,11 +2,11 @@ FROM node:latest as builder
 
 WORKDIR /
 
-COPY src/frontend/ src/frontend/
+COPY frontend/ frontend/
 
-RUN cd src/frontend
-RUN cd src/frontend && npm ci
-RUN cd src/frontend && npm run build
+RUN cd frontend
+RUN cd frontend && npm ci
+RUN cd frontend && npm run build
 
 COPY . .
 
@@ -14,9 +14,7 @@ FROM python:3.11-slim-bookworm
 
 WORKDIR /
 
-COPY --from=builder src/ .
-
-RUN cd src/
+COPY --from=builder / .
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
