@@ -1,7 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 from knox.auth import TokenAuthentication
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.response import Response
 from rest_framework import generics, status
 from . import models
@@ -9,10 +9,14 @@ from . import serializers
 from rest_framework import filters
 from django.db.models import Q
 from modules.utilities.users_management import permissions as usersPermissions
+from drf_spectacular.types import OpenApiTypes
 
 #===================| Donkeys |===================#
 
-@extend_schema(tags=["API - Sponsoring"])
+@extend_schema(tags=["API - Sponsoring"],
+               parameters=[
+                   OpenApiParameter("local_id", OpenApiTypes.UUID, OpenApiParameter.QUERY)
+               ])
 class AnimalListCreate(generics.ListCreateAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
@@ -90,7 +94,10 @@ class NotMyDonkeys(generics.ListCreateAPIView):
 #=================| Donkey Business |=================#
 
 
-@extend_schema(tags=["API - Sponsoring"],)
+@extend_schema(tags=["API - Sponsoring"],
+               parameters=[
+                   OpenApiParameter("local_id", OpenApiTypes.UUID, OpenApiParameter.QUERY),
+               ])
 class AllActivities(generics.ListAPIView):
     queryset = models.Activity.objects.all()
     serializer_class = serializers.ActivitySerializer
@@ -110,7 +117,7 @@ class AllActivities(generics.ListAPIView):
 
         if local_id:
             local_donkeys = models.Animal.objects.filter(local_id=local_id)
-            queryset = queryset.filter(animal__in=local_donkeys).values('activity')
+            queryset = models.AnimalActivity.objects.filter(animal__in=local_donkeys).values('activity')
         
         return queryset
 
