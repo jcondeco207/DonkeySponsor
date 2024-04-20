@@ -27,16 +27,17 @@ env = environ.Env(
     GS_BUCKET_NAME=(str, os.getenv("GS_BUCKET_NAME")),
 )
 
-# Attempt to load the Project ID into the environment, safely failing on error.
-try:
-    _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
-except google.auth.exceptions.DefaultCredentialsError:
-    pass
+if os.getenv('ISGCP', 'true') == 'true':
+    SECRET_KEY = env("SECRET_KEY")
+    # Attempt to load the Project ID into the environment, safely failing on error.
+    try:
+        _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
+    except google.auth.exceptions.DefaultCredentialsError:
+        pass
 
 # Use local .env file in dev mode
 if os.getenv("PYTHON_ENV") == "dev":
     DEBUG = True
-
 # Use GCP secret manager in prod mode
 elif os.getenv("GOOGLE_CLOUD_PROJECT", None):
     project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
@@ -54,7 +55,7 @@ else:
         "No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found."
     )
 
-SECRET_KEY = env("SECRET_KEY")
+
 
 ALLOWED_HOSTS = ["*"]
 
