@@ -1,21 +1,15 @@
 version: "3.8"
 services:
 
-  donkey_sponsor_db:
-    container_name: donkey_sponsor_backend
-    image: postgres
-    stdin_open: true
-    tty: true
+  cloudsqlproxy:
+    container_name: cloudsql-proxy
+    image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
     volumes:
-      - ds_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: DonkeySponsorBackend
-      POSTGRES_USER: $"{POSTGRES_USER}"
-      POSTGRES_PASSWORD: $"{POSTGRES_PSW}"
+      - ./creds.json:/secrets/cloudsql/creds.json
     ports:
-      - '6379'
-    networks:
-      - donkey_sponsor_network
+      - 127.0.0.1:5432:5432
+    command: /cloud_sql_proxy -instances="django-cloudrun-project:us-east1:django-dev-db"=tcp:0.0.0.0:5432 -credential_file=/secrets/cloudsql/creds.json
+    restart: always
     
   donkey_sponsor_backend:
     container_name: donkey_sponsor_backend
@@ -28,7 +22,7 @@ services:
     stdin_open: true
     tty: true
     depends_on:
-      - donkey_sponsor_db
+      - cloudsqlproxy
     networks:
       - donkey_sponsor_network
 networks:

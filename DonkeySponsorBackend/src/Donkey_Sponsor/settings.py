@@ -1,7 +1,11 @@
+import io
 from pathlib import Path
 from datetime import timedelta
 import os
 from dotenv import load_dotenv
+import google.auth
+from google.cloud import secretmanager
+import environ
 
 envfile = os.environ.get('ENV_FILE_NAME', '.env')
 load_dotenv(envfile)
@@ -17,10 +21,43 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-*)7a)!lb@0-+v3p3ve$ejzghtny912(6=hs2ul0w)s_u1wn1jw"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+env = environ.Env(
+    SECRET_KEY=(str, os.getenv("SECRET_KEY")),
+    DATABASE_URL=(str, os.getenv("DATABASE_URL")),
+    GS_BUCKET_NAME=(str, os.getenv("GS_BUCKET_NAME")),
+)
 
-ALLOWED_HOSTS = []
+# Attempt to load the Project ID into the environment, safely failing on error.
+try:
+    _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
+except google.auth.exceptions.DefaultCredentialsError:
+    pass
+
+# Use local .env file in dev mode
+if os.getenv("PYTHON_ENV") == "dev":
+    DEBUG = True
+
+# Use GCP secret manager in prod mode
+elif os.getenv("GOOGLE_CLOUD_PROJECT", None):
+    project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
+
+    client = secretmanager.SecretManagerServiceClient()
+    settings_name = os.getenv("SETTINGS_NAME", "django_app_settings")
+    name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
+    payload = client.access_secret_version(name=name).payload.data.decode(
+        "UTF-8"
+    )
+
+    env.read_env(io.StringIO(payload))
+else:
+    raise Exception(
+        "No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found."
+    )
+
+SECRET_KEY = env("SECRET_KEY")
+
+ALLOWED_HOSTS = ["*"]
+
 
 # Application definition
 
@@ -133,19 +170,28 @@ TEMPLATES = [
 
 dbname = str(os.getenv('POSTGRES_DB'))
 dbhost = str(os.getenv('POSTGRES_HOST'))
-dbport = str(os.getenv('POSTGRES_PORT'))
+dbport = os.getenv('POSTGRES_PORT')
+dbuser = str(os.getenv('POSTGRES_USER'))
+dbpassword = str(os.getenv('POSTGRES_PSW'))
 
 # Database
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": dbname,
-        "USER": str(os.getenv('POSTGRES_USER')),
-        "PASSWORD": str(os.getenv('POSTGRES_PSW')),
-        "HOST": dbhost,
-        "PORT": dbport
+if os.getenv('ISGCP', 'true') == 'false':
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": dbname,
+            "USER": dbuser,
+            "PASSWORD": dbpassword,
+            "HOST": dbhost,
+            "PORT": dbport
+        }
     }
-}
+else:
+    DATABASES = {"default": env.db()}
+
+if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
+    DATABASES["default"]["HOST"] = "cloudsql-proxy"
+    DATABASES["default"]["PORT"] = 5432
 
 # Password validation
 
