@@ -31,7 +31,7 @@ export default function DonkeyMenu() {
             <MenuItem
                 name='My Farm'
                 active={activeItem === 'My Farm'}
-                onClick={() => handleItemClick('My Farm')}
+                onClick={() => {handleItemClick('My Farm'); navigate(`/my-farm`)}}
             />
             <MenuItem
                 name='Donkeys'
