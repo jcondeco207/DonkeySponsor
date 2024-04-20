@@ -59,9 +59,12 @@ class ActivitySerializer(serializers.ModelSerializer):
         for activity_image_data in activity_images_data:
             models.ActivityImage.objects.create(activity=activity, **activity_image_data)
         return activity
-    
 
-    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["donkey_id"] = models.AnimalActivity.objects.filter(activity = instance).values_list("animal", flat=True)
+        return representation
+
 class DonkeyOfSponsorSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DonkeyOfSponsor

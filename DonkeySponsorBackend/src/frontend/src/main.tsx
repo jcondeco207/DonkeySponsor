@@ -8,13 +8,22 @@ import {
 } from "react-router-dom";
 
 import 'semantic-ui-css/semantic.min.css'
+import Farms from './pages/Farms.js';
+import Home from './pages/Home.js';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      
+      {
+        path: "/",
+        element: <Home/>,
+      },
+      {
+        path: "/farms",
+        element: <Farms/>,
+      },
     ],
   }
 ]);
