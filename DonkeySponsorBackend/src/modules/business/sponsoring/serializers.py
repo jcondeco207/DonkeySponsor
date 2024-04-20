@@ -62,7 +62,7 @@ class ActivitySerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['donkey_id'] = models.Animal.objects.get(id=instance.animal_activity.animal_id).id
+        representation['donkey_id'] = models.AnimalActivity.objects.filter(activity=instance).values_list('animal_id', flat=True)
         return representation
     
 class DonkeyOfSponsorSerializer(serializers.ModelSerializer):
