@@ -4,4 +4,7 @@ from knox import views as knox_views
 from modules.utilities.core.views import LoginView
 from . import views
 
-urlpatterns = []
+urlpatterns = [
+    path('locals/', views.ListLocals.as_view()),
+    path('activity/new', views.CreateActivity.as_view()),
+]
