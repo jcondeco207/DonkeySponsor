@@ -41,9 +41,9 @@ export default function Farms() {
                 }
             })
             .then((response) => {
-                console.log(response.data)
+                // console.log(response.data)
                 setNumberOfLocals(response.data.count);
-                console.log(response.data.results);
+                // console.log(response.data.results);
                 setPage(response.data.results);
             })
             .catch((error) => {
@@ -71,7 +71,7 @@ export default function Farms() {
                 }
             })
             .then((response) => {
-                console.log(response.data.results);
+                // console.log(response.data.results);
                 activities.push(response.data.results);
                 setPage(activities);
                 setNumberOfPageLoads(numberOfPageLoads + 1);
