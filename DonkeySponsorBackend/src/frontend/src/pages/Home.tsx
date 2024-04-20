@@ -2,18 +2,19 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-import { 
+import {
     Visibility,
-    // ItemImage,
-    // ItemHeader,
+    ItemImage,
+    ItemHeader,
     ItemGroup,
-    // ItemExtra,
-    // ItemDescription,
-    // ItemContent,
-    // Icon,
-    // Image,
-    // Item,
- } from 'semantic-ui-react'
+    ItemDescription,
+    ItemContent,
+    Item,
+    Header,
+    HeaderContent,
+    Icon,
+} from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css'
 
 type Activity = {
     id: string,
@@ -21,7 +22,13 @@ type Activity = {
     status: boolean,
     lastUptadedAt: string,
     createdAt: string,
-    activity_image: string,
+    activity_image: [
+        {
+            id: string,
+            image: string,
+            activity: string
+        }
+    ],
     donkey_id: string[]
 }
 
@@ -29,6 +36,7 @@ export default function Home() {
 
     const [page, setPage] = useState<Activity[]>([])
     const [numberOfPageLoads, setNumberOfPageLoads] = useState(2);
+    const [numberOfActivities, setNumberOfActivities] = useState(0);
 
     useEffect(() => {
         const csrfToken = Cookies.get("csrftoken");
@@ -43,6 +51,8 @@ export default function Home() {
                 }
             })
             .then((response) => {
+                console.log(response.data)
+                setNumberOfActivities(response.data.count);
                 console.log(response.data.results);
                 setPage(response.data.results);
             })
@@ -54,6 +64,10 @@ export default function Home() {
     const loadMoreContent = () => {
         var activities = page;
         const csrfToken = Cookies.get("csrftoken");
+        var offset = numberOfPageLoads * 10;
+        if (offset > numberOfActivities) {
+            offset = numberOfActivities
+        }
 
         axios
             .get(`/api/activities/`, {
@@ -77,21 +91,32 @@ export default function Home() {
             });
     }
 
+    const doNothing = () => { }
+
     return (
         <div>
             <Visibility
                 fireOnMount
-                onBottomVisible={loadMoreContent}
+                onBottomVisible={((numberOfPageLoads * 10) < numberOfActivities) ? loadMoreContent : doNothing}
             >
+                <Header as='h2'>
+                    <Icon name='sticker mule' />
+                    <HeaderContent>Donkey Activities</HeaderContent>
+                </Header>
                 <ItemGroup>
-                    {/* {page.map((activity, index) => (
+                    {page.map((activity) => (
                         <Item>
-                            
+                            <ItemImage size='small' src={activity.activity_image[0]?.image} />
+
+                            <ItemContent>
+                                <ItemHeader as='a'>{activity.donkey_id[0]}</ItemHeader>
+                                <ItemDescription>
+                                    <p>{activity.description}</p>
+                                </ItemDescription>
+                            </ItemContent>
                         </Item>
-                    ))} */}
+                    ))}
                 </ItemGroup>
-
-
             </Visibility>
         </div>
     );
