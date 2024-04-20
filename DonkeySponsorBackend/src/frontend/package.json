@@ -15,11 +15,14 @@
     "@mui/joy": "^5.0.0-beta.32",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3",
     "recharts": "^2.12.4",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.5",
     "universal-cookie": "^6.1.1"
   },
   "devDependencies": {
-    "@types/react": "^18.2.37",
+    "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.15",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
