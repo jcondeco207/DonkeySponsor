@@ -13,6 +13,7 @@ from modules.business.sponsoring import serializers as SponsorSerializers
 from modules.utilities.users_management import permissions as donkeyPermissions
 from rest_framework import permissions
 
+@extend_schema(tags=["API - Locals"])
 class ListLocals(generics.ListCreateAPIView):
     queryset = models.Local.objects.all()
     authentication_classes = [TokenAuthentication, SessionAuthentication]
@@ -22,7 +23,7 @@ class ListLocals(generics.ListCreateAPIView):
     def get_permissions(self):
         return super().get_permissions()
     
-
+@extend_schema(tags=["API - Locals"])
 class CreateActivity(generics.CreateAPIView):
     queryset = SponsorModels.Activity.objects.all()
     serializer_class = SponsorSerializers.ActivitySerializer
