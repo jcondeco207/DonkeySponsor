@@ -48,7 +48,6 @@ elif os.getenv("GOOGLE_CLOUD_PROJECT", None):
     payload = client.access_secret_version(name=name).payload.data.decode(
         "UTF-8"
     )
-
     env.read_env(io.StringIO(payload))
 else:
     raise Exception(
@@ -250,7 +249,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    BASE_DIR.joinpath('frontend', 'dist'),  # new
+    BASE_DIR.joinpath('frontend', 'dist'), 
 )
 
 #==================================| DRF Spectacular |==================================#
