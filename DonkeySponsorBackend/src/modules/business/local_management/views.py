@@ -19,7 +19,6 @@ class ListLocals(generics.ListCreateAPIView):
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     serializer_class = serializers.LocalSerializer
     filter_backends = [filters.SearchFilter]
-
     def get_permissions(self):
         return super().get_permissions()
     
