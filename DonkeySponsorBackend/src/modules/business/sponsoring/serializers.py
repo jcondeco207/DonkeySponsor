@@ -44,7 +44,7 @@ class ActivityImageSerializer(serializers.ModelSerializer):
 
 class ActivitySerializer(serializers.ModelSerializer):
     activity_image = ActivityImageSerializer(many=True, required=False)
-    donkey_id = serializers.UUIDField()
+    donkey_id = serializers.UUIDField(write_only=True)
 
     class Meta:
         model = models.Activity
@@ -60,7 +60,10 @@ class ActivitySerializer(serializers.ModelSerializer):
             models.ActivityImage.objects.create(activity=activity, **activity_image_data)
         return activity
     
-
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['donkey_id'] = models.Animal.objects.get(id=instance.animal_activity.animal_id).id
+        return representation
     
 class DonkeyOfSponsorSerializer(serializers.ModelSerializer):
     class Meta:
