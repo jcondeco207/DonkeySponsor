@@ -41,7 +41,7 @@ if os.getenv("PYTHON_ENV") == "dev":
 # Use GCP secret manager in prod mode
 elif os.getenv("GOOGLE_CLOUD_PROJECT", None):
     project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
-
+    DEBUG = True
     client = secretmanager.SecretManagerServiceClient()
     settings_name = os.getenv("SETTINGS_NAME", "django_app_settings")
     name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
@@ -231,7 +231,7 @@ REST_FRAMEWORK = {
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 50,
-    
+
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
@@ -269,7 +269,7 @@ SPECTACULAR_SETTINGS = {
     'PRESERVE_REFERENCES': False,
     'DEFAULT_AUTO_SCHEMA_CLASS': 'drf_spectacular.schema.SchemaGenerator',
     'SERVE_URLCONF': 'Donkey_Sponsor.urls',
-    'TAGS': [  # tags to categorize API classes
+    'TAGS': [  # tags to categorize API classes 
     ],
 }
 
