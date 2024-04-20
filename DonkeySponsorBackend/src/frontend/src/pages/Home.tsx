@@ -4,34 +4,44 @@ import Cookies from "js-cookie";
 
 import {
     Visibility,
+    ItemImage,
+    ItemHeader,
     ItemGroup,
+    ItemDescription,
+    ItemContent,
+    Item,
     Header,
     HeaderContent,
     Icon,
-    CardContent,
-    Card,
 } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 
-type Locals = {
+type Activity = {
     id: string,
-    latitude: string,
-    longitude: string,
-    name: string,
-    description: string
-    owner: string
+    description: string,
+    status: boolean,
+    lastUptadedAt: string,
+    createdAt: string,
+    activity_image: [
+        {
+            id: string,
+            image: string,
+            activity: string
+        }
+    ],
+    donkey_id: string[]
 }
 
-export default function Farms() {
+export default function Home() {
 
-    const [page, setPage] = useState<Locals[]>([])
+    const [page, setPage] = useState<Activity[]>([])
     const [numberOfPageLoads, setNumberOfPageLoads] = useState(2);
-    const [numberOfLocals, setNumberOfLocals] = useState(0);
+    const [numberOfActivities, setNumberOfActivities] = useState(0);
 
     useEffect(() => {
         const csrfToken = Cookies.get("csrftoken");
         axios
-            .get(`/api/locals/`, {
+            .get(`/api/activities/`, {
                 headers: {
                     Accept: "application/json",
                     "X-CSRFToken": String(csrfToken)
@@ -42,7 +52,7 @@ export default function Farms() {
             })
             .then((response) => {
                 // console.log(response.data)
-                setNumberOfLocals(response.data.count);
+                setNumberOfActivities(response.data.count);
                 // console.log(response.data.results);
                 setPage(response.data.results);
             })
@@ -55,12 +65,12 @@ export default function Farms() {
         var activities = page;
         const csrfToken = Cookies.get("csrftoken");
         var offset = numberOfPageLoads * 10;
-        if (offset > numberOfLocals) {
-            offset = numberOfLocals
+        if (offset > numberOfActivities) {
+            offset = numberOfActivities
         }
 
         axios
-            .get(`/api/locals/`, {
+            .get(`/api/activities/`, {
                 headers: {
                     Accept: "application/json",
                     "X-CSRFToken": String(csrfToken)
@@ -87,21 +97,24 @@ export default function Farms() {
         <div>
             <Visibility
                 fireOnMount
-                onBottomVisible={((numberOfPageLoads * 10) < numberOfLocals) ? loadMoreContent : doNothing}
+                onBottomVisible={((numberOfPageLoads * 10) < numberOfActivities) ? loadMoreContent : doNothing}
             >
                 <Header as='h2'>
-                    <Icon name='home' />
-                    <HeaderContent>Donkey Farms</HeaderContent>
+                    <Icon name='sticker mule' />
+                    <HeaderContent>Donkey Activities</HeaderContent>
                 </Header>
                 <ItemGroup>
-                    {page.map((local) => (
-                        <Card>
-                            <CardContent header={local.name} />
-                            <CardContent description={local.description} />
-                            <CardContent extra>
-                                <Icon name='sticker mule' />4 Donkeys
-                            </CardContent>
-                        </Card>
+                    {page.map((activity) => (
+                        <Item>
+                            <ItemImage size='small' src={activity.activity_image[0]?.image} />
+
+                            <ItemContent>
+                                <ItemHeader as='a'>{activity.donkey_id[0]}</ItemHeader>
+                                <ItemDescription>
+                                    <p>{activity.description}</p>
+                                </ItemDescription>
+                            </ItemContent>
+                        </Item>
                     ))}
                 </ItemGroup>
             </Visibility>

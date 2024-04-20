@@ -5,8 +5,10 @@ import {
     Button,
     Menu,
 } from 'semantic-ui-react';
+import { useNavigate } from "react-router-dom";
 
 export default function DonkeyMenu() {
+    const navigate = useNavigate();
 
     const [activeItem, setActiveItem] = useState("home");
 
@@ -19,17 +21,17 @@ export default function DonkeyMenu() {
             <MenuItem
                 name='home'
                 active={activeItem === 'home'}
-                onClick={() => handleItemClick('home')}
+                onClick={() => {handleItemClick('home'); navigate(`/`)} }
             />
             <MenuItem
                 name='farms'
                 active={activeItem === 'farms'}
-                onClick={() => handleItemClick('farms')}
+                onClick={() => {handleItemClick('farms'); navigate(`/farms`)}}
             />
             <MenuItem
                 name='My Farm'
                 active={activeItem === 'My Farm'}
-                onClick={() => handleItemClick('My Farm')}
+                onClick={() => {handleItemClick('My Farm'); navigate(`/my-farm`)}}
             />
             <MenuItem
                 name='Donkeys'
