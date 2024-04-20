@@ -12,9 +12,9 @@ class Command(BaseCommand):
         try:
 
             # Retrieve default credentials from .env file
-            username = str(os.getenv('ADMIN_DEFAULT_USERNAME'))
-            password = str(os.getenv('ADMIN_DEFAULT_PASSWORD'))
-            email = str(os.getenv('ADMIN_DEFAULT_EMAIL'))
+            username = str(os.getenv('ADMIN_DEFAULT_USERNAME', 'admin'))
+            password = str(os.getenv('ADMIN_DEFAULT_PASSWORD', 'admin'))
+            email = str(os.getenv('ADMIN_DEFAULT_EMAIL', 'admin@gmail.com'))
 
             # If one of the required credentials is not provided stop
             if(not username or not password or not email):
