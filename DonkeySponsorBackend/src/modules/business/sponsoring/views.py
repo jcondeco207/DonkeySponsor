@@ -21,12 +21,17 @@ class AnimalListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         search_param = self.request.query_params.get('search', "")
+        local_id = self.request.query_params.get('local_id', None)
+        
         queryset = models.Animal.objects.all()
         if search_param:
             queryset = queryset.filter(
                 Q(name__icontains=search_param) |
                 Q(local_name__icontains=search_param)
-            )
+            ).distinct()
+
+        if local_id:
+            queryset.filter(local_id=local_id)
 
         return queryset
     
@@ -85,12 +90,29 @@ class NotMyDonkeys(generics.ListCreateAPIView):
 #=================| Donkey Business |=================#
 
 
-@extend_schema(tags=["API - Sponsoring"])
+@extend_schema(tags=["API - Sponsoring"],)
 class AllActivities(generics.ListAPIView):
     queryset = models.Activity.objects.all()
     serializer_class = serializers.ActivitySerializer
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+
+    def get_queryset(self):
+        queryset = models.Activity.objects.all()
+        search_param = self.request.query_params.get('search', "")
+        local_id = self.request.query_params.get('local_id', None)
+
+        if search_param:
+            queryset = queryset.filter(
+                Q(title__icontains=search_param)
+            )
+
+        if local_id:
+            local_donkeys = models.Animal.objects.filter(local_id=local_id)
+            queryset = queryset.filter(animal__in=local_donkeys).values('activity')
+        
+        return queryset
 
 # Global view of my donkeys activities
 @extend_schema(tags=["API - Sponsoring"])

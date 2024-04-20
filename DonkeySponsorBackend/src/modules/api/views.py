@@ -15,6 +15,8 @@ from . import utils
 from . import models
 from . import serializers
 from rest_framework import filters
+from modules.business.local_management.models import Local
+from modules.business.local_management.serializers import LocalSerializer
 
 @extend_schema(tags=["API - Auth"])
 @require_POST
@@ -54,5 +56,9 @@ def session_view(request):
 def whoami_view(request):
     if not request.user.is_authenticated:
         return JsonResponse({'isAuthenticated': False})
-
+    
+    if request.user.role=='DonkeyProvider':
+        locals = Local.objects.filter(owner = request.user)
+        locals_data = LocalSerializer(locals, many=True).data
+        return JsonResponse({'username': request.user.username, 'locals': locals_data})
     return JsonResponse({'username': request.user.username})

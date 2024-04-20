@@ -48,6 +48,7 @@ class Activity(models.Model):
                            default=uuid.uuid4,
                            editable=False) 
     
+    title = models.CharField(default="")
     description = models.CharField()
     status = models.BooleanField()
     lastUpdatedAt = models.DateTimeField(auto_now=True)
