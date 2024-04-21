@@ -33,10 +33,6 @@ const router = createBrowserRouter([
         element: <MyFarm/>,
       },
       {
-        path: "/my-farm/publish-activity",
-        element: <MyFarm/>,
-      },
-      {
         path: "/donkeys",
         element: <Donkeys/>,
       },
