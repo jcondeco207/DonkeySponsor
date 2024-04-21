@@ -38,6 +38,7 @@ if os.getenv('ISGCP', 'true') == 'true':
 # Use local .env file in dev mode
 if os.getenv("PYTHON_ENV") == "dev":
     DEBUG = True
+
 # Use GCP secret manager in prod mode
 elif os.getenv("GOOGLE_CLOUD_PROJECT", None):
     project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
@@ -282,5 +283,9 @@ SPECTACULAR_SETTINGS = {
 
 CSRF_COOKIE_SAMESITE = 'Strict'
 SESSION_COOKIE_SAMESITE = 'Strict'
-CSRF_COOKIE_HTTPONLY = False  # False since we will grab it via universal-cookies
+CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000/', 'https://donkeysponsor-donkey-sponsor-backend-jhszdcaqka-nw.a.run.app', 'https://*.a.run.app']
+print(CSRF_TRUSTED_ORIGINS)

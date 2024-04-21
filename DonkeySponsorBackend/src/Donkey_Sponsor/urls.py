@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.shortcuts import render
 from django.conf.urls.static import static
 
@@ -57,5 +57,5 @@ urlpatterns = [
     path('api/', include('modules.utilities.users_management.urls')),
 
     # React
-    path('', login_required(index_view), name='index'),
+    re_path(r'.*', index_view, name='index'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -8,6 +8,9 @@
     </head>
     <body>
         <div id="root"></div>
-        <script type="module" src="/src/main.tsx"></script>
+        {% csrf_token %}
+        <script type="module" src="/src/main.tsx">
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        </script>
     </body>
 </html>

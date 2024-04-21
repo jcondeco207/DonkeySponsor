@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Segment, Dropdown } from 'semantic-ui-react';
 import Cookies from "js-cookie";
+import axios from "axios";
 
 const SignupForm: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -24,21 +25,18 @@ const SignupForm: React.FC = () => {
         try {
             const csrfToken = Cookies.get("csrftoken");
             if (csrfToken) {
-                const response = await fetch('/api/users', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-CSRFToken': csrfToken
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                if (!response.ok) {
-                    throw new Error('Signup request failed');
+                try {
+                    const response = await axios.post('/api/users', formData, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        }
+                    });
+                
+                    console.log(response.data);
+                } catch (error) {
+                    console.error('Signup request failed', error);
                 }
-
-                const data = await response.json();
-                console.log(data);
             }
 
         } catch (error) {

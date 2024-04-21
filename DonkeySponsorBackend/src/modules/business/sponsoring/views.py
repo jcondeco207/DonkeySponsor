@@ -3,7 +3,7 @@ from rest_framework.authentication import SessionAuthentication
 from knox.auth import TokenAuthentication
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.response import Response
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from . import models
 from . import serializers
 from rest_framework import filters
@@ -21,7 +21,8 @@ from rest_framework.views import APIView
 class AnimalListCreate(generics.ListCreateAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
-    authentication_classes = [TokenAuthentication, SessionAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes =  [permissions.IsAdminUser | usersPermissions.IsDonkeyProvider]
     filter_backends = [filters.SearchFilter]
 
     def get_queryset(self):
