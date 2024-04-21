@@ -36,19 +36,17 @@ export default function DonkeyMenu() {
             <MenuItem
                 name='Donkeys'
                 active={activeItem === 'Donkeys'}
-                onClick={() => handleItemClick('Donkeys')}
+                onClick={() => {handleItemClick('Donkeys'); navigate(`/donkeys`)}}
             />
             <MenuItem
                 name='My donkeys'
                 active={activeItem === 'My donkeys'}
-                onClick={() => handleItemClick('My donkeys')}
+                onClick={() => {handleItemClick('My donkeys'); navigate(`my_donkeys`)}}
             />
-
-
 
             <MenuMenu position='right'>
                 <MenuItem>
-                    <Button primary>Sign Up</Button>
+                    <Button primary onClick={() => {handleItemClick('Sign Up'); navigate(`signup`)}} >Sign Up</Button>
                 </MenuItem>
             </MenuMenu>
         </Menu>

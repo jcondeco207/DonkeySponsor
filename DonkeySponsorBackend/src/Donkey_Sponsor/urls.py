@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
+from django.conf.urls.static import static
 
 # API Documentation
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
@@ -10,7 +11,7 @@ from drf_yasg.views import get_schema_view
 # Permissions
 from rest_framework import permissions
 from django.contrib.auth.decorators import login_required
-
+from Donkey_Sponsor import settings
 # OTP
 from two_factor.urls import urlpatterns as tf_urls
 
@@ -57,4 +58,4 @@ urlpatterns = [
 
     # React
     path('', login_required(index_view), name='index'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

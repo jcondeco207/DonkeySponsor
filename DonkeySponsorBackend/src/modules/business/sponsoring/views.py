@@ -10,6 +10,7 @@ from rest_framework import filters
 from django.db.models import Q
 from modules.utilities.users_management import permissions as usersPermissions
 from drf_spectacular.types import OpenApiTypes
+from rest_framework.views import APIView
 
 #===================| Donkeys |===================#
 
@@ -38,7 +39,8 @@ class AnimalListCreate(generics.ListCreateAPIView):
             queryset.filter(local_id=local_id)
 
         return queryset
-    
+
+@extend_schema(tags=["API - Sponsoring"]) 
 class AnimalDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
@@ -56,8 +58,18 @@ class SponsoredDonkeys(generics.ListAPIView):
         sponsoredIds = models.DonkeyOfSponsor.objects.filter(user=user).values_list('animal', flat=True)
         queryset = models.Animal.filter(id__in=sponsoredIds)
         return queryset
+
+@extend_schema(tags=["API - Sponsoring"])  
+class RemoveSponsor(APIView):
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
+    def delete(self, request, *args, **kwargs):
+        sponsor = request.user
+        donkeyId = kwargs.get('donkey_id', None)
+        models.DonkeyOfSponsor.objects.filter(animal_id=donkeyId, user = sponsor).delete()
+        return Response(status=status.HTTP_202_ACCEPTED, data={'ok': f'Sponsor removed!'})
     
-@extend_schema(tags=["API - Sponsoring"])
+@extend_schema(tags=["API - Sponsoring"],
+               request=serializers.FormmatedNewSponsor)
 class NotMyDonkeys(generics.ListCreateAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
@@ -70,6 +82,8 @@ class NotMyDonkeys(generics.ListCreateAPIView):
         sponsoredIds = models.DonkeyOfSponsor.objects.filter(user=user).values_list('animal', flat=True)
         return models.Animal.objects.exclude(id__in=sponsoredIds)
     
+    @extend_schema(tags=["API - Sponsoring"],
+                   request=serializers.FormmatedNewSponsor)
     def create(self, request, *args, **kwargs):
         donkeyId = request.data.get('donkey_id', None)
         value = request.data.get('value', 0)
@@ -82,12 +96,14 @@ class NotMyDonkeys(generics.ListCreateAPIView):
             sponsor = request.user
             stored, created = models.DonkeyOfSponsor.objects.update_or_create(animal=donkey,
                                                                               user=sponsor,
+                                                                              status=True,
                                                                               defaults={
                                                                                 'value': value
                                                                             })
             
             return Response(status=status.HTTP_202_ACCEPTED, data={'ok': f'Sponsor for {donkey.name} registered!'})
         except Exception as e:
+            print(e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR, data={'error': f'{e}'})
         
     
@@ -97,6 +113,7 @@ class NotMyDonkeys(generics.ListCreateAPIView):
 @extend_schema(tags=["API - Sponsoring"],
                parameters=[
                    OpenApiParameter("local_id", OpenApiTypes.UUID, OpenApiParameter.QUERY),
+                   OpenApiParameter("animal_id", OpenApiTypes.UUID, OpenApiParameter.QUERY),
                ])
 class AllActivities(generics.ListAPIView):
     queryset = models.Activity.objects.all()
@@ -109,6 +126,7 @@ class AllActivities(generics.ListAPIView):
         queryset = models.Activity.objects.all()
         search_param = self.request.query_params.get('search', "")
         local_id = self.request.query_params.get('local_id', None)
+        animal_id = self.request.query_params.get('animal_id', None)
 
         if search_param:
             queryset = queryset.filter(
@@ -118,6 +136,10 @@ class AllActivities(generics.ListAPIView):
         if local_id:
             local_donkeys = models.Animal.objects.filter(local_id=local_id)
             queryset = models.AnimalActivity.objects.filter(animal__in=local_donkeys).values('activity')
+        
+        if animal_id:
+            local_donkeys = models.Animal.objects.filter(local_id=local_id)
+            queryset = models.AnimalActivity.objects.filter(animal_id=animal_id).values('activity')
         
         return queryset
 
