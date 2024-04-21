@@ -38,6 +38,7 @@ if os.getenv('ISGCP', 'true') == 'true':
 # Use local .env file in dev mode
 if os.getenv("PYTHON_ENV") == "dev":
     DEBUG = True
+
 # Use GCP secret manager in prod mode
 elif os.getenv("GOOGLE_CLOUD_PROJECT", None):
     project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
@@ -195,6 +196,9 @@ else:
 if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
     DATABASES["default"]["HOST"] = "cloudsql-proxy"
     DATABASES["default"]["PORT"] = 5432
+
+print("Databases:")
+print(DATABASES)
 
 # Password validation
 

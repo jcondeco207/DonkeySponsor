@@ -49,3 +49,51 @@ For this WebApp the product that we choose was Cloud Run for the low pricing whe
     + Delete donkeys
 + My sponsored donkeys page (Opened to sponsors)
 + Sponsored news (Opened to sponsors)
+
+
+## GCloud config steps
+
+### GCloud SQL
+
+
+### Secrets manager
+
+1. Create secrets for this project
+```shell
+gcloud secrets create django_app_settings --replication-policy automatic
+```
+
+2. Import the values from a .env.prod in our project
+```shell
+gcloud secrets versions add django_app_settings --data-file .env.prod
+```
+
+3. Set the policies for the service account
+```shell
+gcloud secrets add-iam-policy-binding django_app_settings \
+    --member serviceAccount:249042774616@cloudbuild.gserviceaccount.com \
+    --role roles/secretmanager.secretAccessor
+```
+
+### Cloud Run
+
+1. Create the docker image
+```shell
+docker compose up --build
+```
+
+
+2. Push it to docker hub
+
+```shell
+docker tag donkeysponsor-donkey_sponsor_backend:latest jrcondeco/donkeysponsor-donkey_sponsor_backend:latest
+```
+    
+
+```shell
+docker push jrcondeco/donkeysponsor-donkey_sponsor_backend:latest 
+```
+
+3. Setup cloud run service (specify port 8000 and give a delay of 240s for the probe check)
+
+4. Pray
