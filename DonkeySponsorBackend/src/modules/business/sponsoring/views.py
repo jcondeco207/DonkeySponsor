@@ -22,6 +22,7 @@ class AnimalListCreate(generics.ListCreateAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
     authentication_classes = [TokenAuthentication, SessionAuthentication]
+    permission_classes =  [usersPermissions.IsDonkeyProvider]
     filter_backends = [filters.SearchFilter]
 
     def get_queryset(self):

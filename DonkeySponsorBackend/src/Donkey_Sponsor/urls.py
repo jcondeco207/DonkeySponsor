@@ -57,5 +57,5 @@ urlpatterns = [
     path('api/', include('modules.utilities.users_management.urls')),
 
     # React
-    path('', login_required(index_view), name='index'),
+    path('', index_view, name='index'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
