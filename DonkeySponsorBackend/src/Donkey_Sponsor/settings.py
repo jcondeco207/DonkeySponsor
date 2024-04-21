@@ -122,7 +122,7 @@ WSGI_APPLICATION = "Donkey_Sponsor.wsgi.application"
 
 TWO_FACTOR_WEBAUTHN_RP_NAME="Donkey_Sponsor"
 LOGIN_URL = 'two_factor:login'
-LOGIN_REDIRECT_URL = '/two_factor:profile'
+LOGIN_REDIRECT_URL = '/'
 
 #==================================| Knox |==================================#
 
