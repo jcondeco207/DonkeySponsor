@@ -47,6 +47,7 @@ type Donkey = {
 type Activity = {
     id: string,
     description: string,
+    title: string,
     status: boolean,
     lastUptadedAt: string,
     createdAt: string,
@@ -212,7 +213,7 @@ export default function MyFarm() {
                         <MyFarmAddDonkey farmId={myFarmId} open={openAddDonkey} setOpen={setOpenAddDonkeys} />
                     </GridColumn>
                     <GridColumn>
-                        <MyFarmPublishActivity farmId={myFarmId} open={openPublishActivity} setOpen={setOpenPublishActivity}/>
+                        <MyFarmPublishActivity farmId={myFarmId} open={openPublishActivity} setOpen={setOpenPublishActivity} />
                     </GridColumn>
                 </GridRow>
             </Grid>
@@ -223,7 +224,7 @@ export default function MyFarm() {
                         <Header as='h2'>
                             <HeaderContent>My Farm Donkeys</HeaderContent>
                         </Header>
-                        <ItemGroup>
+                        <ItemGroup divided>
                             {myFarmDonkeys.map((donkey) => (
                                 <Item>
                                     <ItemContent>
@@ -252,11 +253,11 @@ export default function MyFarm() {
                         <Header as='h2'>
                             <HeaderContent>My Farm Activities</HeaderContent>
                         </Header>
-                        <ItemGroup>
+                        <ItemGroup divided>
                             {myFarmActivities.map((activity) => (
                                 <Item>
                                     <ItemContent>
-                                        <ItemHeader as='a'>{activity.donkey_id[0]}</ItemHeader>
+                                        <ItemHeader as='a'>{activity.title}</ItemHeader>
                                         <ItemDescription>
                                             <p>{activity.description}</p>
                                         </ItemDescription>
