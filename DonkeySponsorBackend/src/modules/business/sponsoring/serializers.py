@@ -2,6 +2,7 @@ from rest_framework import serializers
 from . import models
 
 class AnimalImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
     class Meta:
         model = models.AnimalImage
         fields = ['id', 'image']

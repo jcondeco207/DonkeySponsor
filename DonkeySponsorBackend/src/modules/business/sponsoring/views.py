@@ -11,6 +11,7 @@ from django.db.models import Q
 from modules.utilities.users_management import permissions as usersPermissions
 from drf_spectacular.types import OpenApiTypes
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
 
 #===================| Donkeys |===================#
 
@@ -24,6 +25,7 @@ class AnimalListCreate(generics.ListCreateAPIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes =  [permissions.IsAdminUser | usersPermissions.IsDonkeyProvider]
     filter_backends = [filters.SearchFilter]
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
         search_param = self.request.query_params.get('search', "")
