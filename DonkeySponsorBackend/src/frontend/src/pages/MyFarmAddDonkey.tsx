@@ -9,6 +9,7 @@ import {
     ModalContent,
     ModalActions,
     ButtonContent,
+    FormField
 } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import { useState } from 'react';
@@ -26,6 +27,7 @@ export default function MyFarmAddDonkey(props: MyFarmAddDonkeyProps) {
 
     const [name, setName] = useState("");
     const [color, setcolor] = useState("");
+    const [image, setImage] = useState("");
 
     const handleColorChange = (_: any, data: any) => {
         setcolor(data.value);
@@ -35,6 +37,10 @@ export default function MyFarmAddDonkey(props: MyFarmAddDonkeyProps) {
         setName(data.value);
     }
 
+    const handleImageChange = (e:any) => {
+        setImage(e.target.files[0]);
+    };
+
     const createDonkey = () => {
         const csrfToken = Cookies.get("csrftoken");
         axios
@@ -42,10 +48,12 @@ export default function MyFarmAddDonkey(props: MyFarmAddDonkeyProps) {
                 name: name,
                 color: color,
                 status: true,
-                local: props.farmId
+                local: props.farmId,
+                animal_image: image
             }, {
                 headers: {
                     Accept: "application/json",
+                    'Content-Type': 'multipart/form-data',
                     "X-CSRFToken": csrfToken
                 },
             })
@@ -73,10 +81,14 @@ export default function MyFarmAddDonkey(props: MyFarmAddDonkeyProps) {
             >
                 <ModalHeader>Add Donkey</ModalHeader>
                 <ModalContent>
-                    <Form>
+                    <Form encType='multipart/form-data'>
                         <FormGroup widths='equal'>
                             <FormInput label='Name' placeholder='Name' onChange={handleNameChange} />
                             <FormInput label='Color' placeholder='Color' onChange={handleColorChange} />
+                            <FormField>
+                                <label>Animal Image</label>
+                                <input type='file' name='animal_image' onChange={handleImageChange} />
+                            </FormField>
                         </FormGroup>
                     </Form>
                 </ModalContent>

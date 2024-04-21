@@ -59,8 +59,6 @@ def whoami_view(request):
     
     if request.user.role.name=='DonkeyProvider':
         locals = Local.objects.filter(owner = request.user)
-        print("AQUI")
-        print(locals)
         locals_data = LocalSerializer(locals, many=True).data
         return JsonResponse({'username': request.user.username, 'locals': locals_data})
     return JsonResponse({'username': request.user.username})
