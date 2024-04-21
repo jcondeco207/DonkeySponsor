@@ -285,5 +285,5 @@ CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000/', 'https://donkeysponsor-donkey-sponsor-backend-jhszdcaqka-nw.a.run.app', 'https://*.a.run.app']
+CSRF_TRUSTED_ORIGINS = ['http://*','http://localhost:8000', 'https://donkeysponsor-donkey-sponsor-backend-jhszdcaqka-nw.a.run.app', 'https://*.a.run.app']
 print(CSRF_TRUSTED_ORIGINS)

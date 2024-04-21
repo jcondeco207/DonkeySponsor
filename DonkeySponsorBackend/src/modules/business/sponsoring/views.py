@@ -75,7 +75,7 @@ class NotMyDonkeys(generics.ListCreateAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
     authentication_classes = [TokenAuthentication, SessionAuthentication]
-    permission_classes = [usersPermissions.IsDonkeyGodFather]
+    permission_classes = [permissions.IsAdminUser | usersPermissions.IsDonkeyGodFather]
 
     def get_queryset(self):
         user = self.request.user
