@@ -94,7 +94,7 @@ export default function MyFarmAddDonkey(props: MyFarmAddDonkeyProps) {
                 </ModalContent>
                 <ModalActions>
                     <Button color='black' onClick={() => props.setOpen(false)}>
-                        Nope
+                        Close
                     </Button>
                     <Button
                         content="Add Donkey"

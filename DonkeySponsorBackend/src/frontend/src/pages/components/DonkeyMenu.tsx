@@ -48,6 +48,9 @@ export default function DonkeyMenu() {
                 <MenuItem>
                     <Button primary onClick={() => {handleItemClick('Sign Up'); navigate(`signup`)}} >Sign Up</Button>
                 </MenuItem>
+                <MenuItem>
+                    <Button primary onClick={() => {handleItemClick('Login'); navigate(`/account/login/`)}} >Login</Button>
+                </MenuItem>
             </MenuMenu>
         </Menu>
     )
