@@ -9,9 +9,11 @@ import {
 
 import 'semantic-ui-css/semantic.min.css'
 import Farms from './pages/Farms.js';
+import Donkeys from './pages/Donkeys.tsx';
+import MyDonkeys from './pages/MyDonkeys.tsx';
 import Home from './pages/Home.js';
-import MyFarm from './pages/MyFarm.js';
-import MyFarmAddDonkey from './pages/MyFarmAddDonkey.js';
+import MyFarm from './pages/MyFarm.tsx';
+import MyFarmAddDonkey from './pages/MyFarmAddDonkey.tsx';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
         path: "/my-farm/publish-activity",
         element: <MyFarm/>,
       },
+      {
+        path: "/donkeys",
+        element: <Donkeys/>,
+      },
+      {
+        path: "/my_donkeys",
+        element: <MyDonkeys/>,
+      }
     ],
   }
 ]);

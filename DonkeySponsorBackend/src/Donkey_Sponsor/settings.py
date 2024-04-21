@@ -256,6 +256,9 @@ STATICFILES_DIRS = (
     BASE_DIR.joinpath('frontend', 'dist'), 
 )
 
+MEDIA_ROOT =  os.path.join(os.path.dirname(BASE_DIR), "uploads")
+MEDIA_URL = '/uploads/'
+
 #==================================| DRF Spectacular |==================================#
 
 SPECTACULAR_SETTINGS = {

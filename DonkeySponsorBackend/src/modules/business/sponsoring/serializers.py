@@ -69,3 +69,8 @@ class DonkeyOfSponsorSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DonkeyOfSponsor
         fields = '__all__'
+
+
+class FormmatedNewSponsor(serializers.Serializer):
+    donkey_id = serializers.UUIDField()
+    value = serializers.FloatField()
