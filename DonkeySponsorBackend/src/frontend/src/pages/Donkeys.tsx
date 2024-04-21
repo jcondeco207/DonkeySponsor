@@ -136,7 +136,7 @@ export default function Donkeys() {
                 <ItemGroup>
                     {page.map((donkey) => (
                         <Card>
-                            <Image src={String(donkey.animal_image[0].image)} wrapped ui={false} />
+                            <Image src={donkey.animal_image.length > 0 ? String(donkey.animal_image[0].image) : ""} wrapped ui={false} />
                             <CardContent header={donkey.name} />
                             <CardContent description={donkey.color} />
                             <CardContent extra>
