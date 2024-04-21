@@ -65,8 +65,8 @@ export default function MyFarm() {
     const [myFarmActivities, setMyFarmActivities] = useState<Activity[]>([]);
     const [numberOfDonkeys, setNumberOfDonkeys] = useState(0);
     const [numberOfActivities, setNumberOfActivities] = useState(0);
-    // const [donkeysActivePage, setDonkeysActivePage] = useState(1);
-    // const [activitiesActivePage, setActivitiesActivePage] = useState(1);
+    const [donkeysActivePage, setDonkeysActivePage] = useState(1);
+    const [activitiesActivePage, setActivitiesActivePage] = useState(1);
     const itemPerPage = 5;
 
     useEffect(() => {
@@ -130,6 +130,72 @@ export default function MyFarm() {
             });
     }, []);
 
+
+    useEffect(() => {
+        var offset = donkeysActivePage * itemPerPage;
+        if (offset > numberOfDonkeys - 1) {
+            offset = numberOfDonkeys - 1
+        }
+
+        const csrfToken = Cookies.get("csrftoken");
+        axios
+            .get(`/api/animals/`, {
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRFToken": String(csrfToken)
+                },
+                params: {
+                    local_id: myFarmId,
+                    limit: itemPerPage,
+                    offset: offset
+                }
+            })
+            .then((response) => {
+                console.log(response)
+                setMyFarmDonkeys(response.data.results);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    }, [donkeysActivePage]);
+
+    useEffect(() => {
+        var offset = activitiesActivePage * itemPerPage;
+        if (offset > numberOfActivities - 1) {
+            offset = numberOfActivities - 1
+        }
+
+        const csrfToken = Cookies.get("csrftoken");
+        axios
+            .get(`/api/activities/`, {
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRFToken": String(csrfToken)
+                },
+                params: {
+                    local_id: myFarmId,
+                    limit: itemPerPage,
+                    offset: offset
+                }
+            })
+            .then((response) => {
+                console.log(response)
+                setMyFarmActivities(response.data.results);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [activitiesActivePage])
+
+    const handleDonkeysPageChange = (_: any, data: any) => {
+        setDonkeysActivePage(data.activePage);
+    }
+
+    const handleActivitiesPageChange = (_: any, data: any) => {
+        setActivitiesActivePage(data.activePage);
+    }
+
     return (
         <div>
             <Header as='h2'>
@@ -169,6 +235,8 @@ export default function MyFarm() {
 
                         <Pagination
                             boundaryRange={0}
+                            activePage={donkeysActivePage}
+                            onPageChange={handleDonkeysPageChange}
                             defaultActivePage={1}
                             ellipsisItem={null}
                             firstItem={null}
@@ -194,6 +262,7 @@ export default function MyFarm() {
                         <Pagination
                             boundaryRange={0}
                             defaultActivePage={1}
+                            onPageChange={handleActivitiesPageChange}
                             ellipsisItem={null}
                             firstItem={null}
                             lastItem={null}

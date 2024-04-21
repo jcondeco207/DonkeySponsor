@@ -65,8 +65,8 @@ export default function Home() {
         var activities = page;
         const csrfToken = Cookies.get("csrftoken");
         var offset = numberOfPageLoads * 10;
-        if (offset > numberOfActivities) {
-            offset = numberOfActivities
+        if (offset > numberOfActivities - 1) {
+            offset = numberOfActivities - 1
         }
 
         axios
@@ -77,7 +77,7 @@ export default function Home() {
                 },
                 params: {
                     limit: 10,
-                    offset: numberOfPageLoads * 10
+                    offset: offset
                 }
             })
             .then((response) => {
