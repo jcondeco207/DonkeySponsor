@@ -19,6 +19,7 @@ import 'semantic-ui-css/semantic.min.css'
 type Activity = {
     id: string,
     description: string,
+    title: string,
     status: boolean,
     lastUptadedAt: string,
     createdAt: string,
@@ -103,13 +104,13 @@ export default function Home() {
                     <Icon name='sticker mule' />
                     <HeaderContent>Donkey Activities</HeaderContent>
                 </Header>
-                <ItemGroup>
+                <ItemGroup divided>
                     {page.map((activity) => (
                         <Item>
                             <ItemImage size='small' src={activity.activity_image[0]?.image} />
 
                             <ItemContent>
-                                <ItemHeader as='a'>{activity.donkey_id[0]}</ItemHeader>
+                                <ItemHeader as='a'>{activity.title}</ItemHeader>
                                 <ItemDescription>
                                     <p>{activity.description}</p>
                                 </ItemDescription>
