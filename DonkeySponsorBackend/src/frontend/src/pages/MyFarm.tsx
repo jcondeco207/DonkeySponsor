@@ -19,6 +19,8 @@ import {
     Pagination,
 } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
+import '../css/MyFarm.css'
+import MyFarmAddDonkey from "./MyFarmAddDonkey";
 
 // type Local = {
 //     id: string,
@@ -68,6 +70,8 @@ export default function MyFarm() {
     const [donkeysActivePage, setDonkeysActivePage] = useState(1);
     const [activitiesActivePage, setActivitiesActivePage] = useState(1);
     const itemPerPage = 5;
+
+    const [openAddDonkey, setOpenAddDonkeys] = useState(false);
 
     useEffect(() => {
         const csrfToken = Cookies.get("csrftoken");
@@ -202,24 +206,30 @@ export default function MyFarm() {
                 <Icon name='home' />
                 <HeaderContent>My Farm</HeaderContent>
             </Header>
-            <div>
-                <Button animated>
-                    <ButtonContent visible>Add Donkey</ButtonContent>
-                    <ButtonContent hidden>
-                        <Icon name='arrow right' />
-                    </ButtonContent>
-                </Button>
-                <Button animated>
-                    <ButtonContent visible>Publish Activity</ButtonContent>
-                    <ButtonContent hidden>
-                        <Icon name='arrow right' />
-                    </ButtonContent>
-                </Button>
-            </div>
-
             <Grid divided='vertically'>
                 <GridRow columns={2}>
                     <GridColumn>
+                        <MyFarmAddDonkey farmId={myFarmId} open={openAddDonkey} setOpen={setOpenAddDonkeys} />
+                    </GridColumn>
+                    <GridColumn>
+                        <Button animated>
+                            <ButtonContent visible>Publish Activity</ButtonContent>
+                            <ButtonContent hidden>
+                                <Icon name='arrow right' />
+                            </ButtonContent>
+                        </Button>
+                    </GridColumn>
+                </GridRow>
+            </Grid>
+
+
+
+            <Grid divided='vertically' className="myFarmLists">
+                <GridRow columns={2}>
+                    <GridColumn>
+                        <Header as='h2'>
+                            <HeaderContent>My Farm Donkeys</HeaderContent>
+                        </Header>
                         <ItemGroup>
                             {myFarmDonkeys.map((donkey) => (
                                 <Item>
@@ -246,6 +256,9 @@ export default function MyFarm() {
                         />
                     </GridColumn>
                     <GridColumn>
+                        <Header as='h2'>
+                            <HeaderContent>My Farm Donkeys</HeaderContent>
+                        </Header>
                         <ItemGroup>
                             {myFarmActivities.map((activity) => (
                                 <Item>

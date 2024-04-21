@@ -1,70 +1,101 @@
 import {
-    Header,
-    HeaderContent,
     Icon,
     FormGroup,
-    FormField,
     Form,
-    Input,
-    TextArea,
+    FormInput,
     Button,
-    Message,
+    Modal,
+    ModalHeader,
+    ModalContent,
+    ModalActions,
+    ButtonContent,
 } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
+import { useState } from 'react';
+import axios from "axios";
+import Cookies from "js-cookie";
 
-export default function MyFarmAddDonkey() {
+
+type MyFarmAddDonkeyProps = {
+    open: boolean,
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    farmId: string
+}
+
+export default function MyFarmAddDonkey(props: MyFarmAddDonkeyProps) {
+
+    const [name, setName] = useState("");
+    const [color, setcolor] = useState("");
+
+    const handleColorChange = (_: any, data:any) => {
+        setcolor(data.value);
+    }
+
+    const handleNameChange = (_: any, data:any) => {
+        setName(data.value);
+    }
+
+    const createDonkey = () => {
+        const csrfToken = Cookies.get("csrftoken");
+        axios
+            .post(`/api/animals/`, {
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRFToken": String(csrfToken)
+                },
+                params: {
+                    local_id: props.farmId
+                },
+                data: {
+                    name: name,
+                    color: color,
+                    status: true,
+                }
+            })
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     return (
+
         <div>
-            <Header as='h2'>
-                <Icon name='plus' />
-                <Icon name='sticker mule' />
-                <HeaderContent>My Farm</HeaderContent>
-            </Header>
-
-            <Form>
-                <FormGroup widths='equal'>
-                    <FormField
-                        id='form-input-control-first-name'
-                        control={Input}
-                        label='First name'
-                        placeholder='First name'
+            <Modal
+                onClose={() => props.setOpen(false)}
+                onOpen={() => props.setOpen(true)}
+                open={props.open}
+                trigger={<Button animated>
+                    <ButtonContent visible>Add Donkey</ButtonContent>
+                    <ButtonContent hidden>
+                        <Icon name='arrow right' />
+                    </ButtonContent>
+                </Button>}
+            >
+                <ModalHeader>Add Donkey</ModalHeader>
+                <ModalContent>
+                    <Form>
+                        <FormGroup widths='equal'>
+                            <FormInput label='Name' placeholder='Name' onChange={handleNameChange} />
+                            <FormInput label='Color' placeholder='Color' onChange={handleColorChange} />
+                        </FormGroup>
+                    </Form>
+                </ModalContent>
+                <ModalActions>
+                    <Button color='black' onClick={() => props.setOpen(false)}>
+                        Nope
+                    </Button>
+                    <Button
+                        content="Add Donkey"
+                        labelPosition='right'
+                        icon='checkmark'
+                        onClick={() => {createDonkey(); props.setOpen(false)}}
+                        positive
                     />
-                    <FormField
-                        id='form-input-control-last-name'
-                        control={Input}
-                        label='Last name'
-                        placeholder='Last name'
-                    />
-                </FormGroup>
-                <FormField
-                    id='form-textarea-control-opinion'
-                    control={TextArea}
-                    label='Opinion'
-                    placeholder='Opinion'
-                />
-                <FormField
-                    id='form-input-control-error-email'
-                    control={Input}
-                    label='Email'
-                    placeholder='joe@schmoe.com'
-                    error={{
-                        content: 'Please enter a valid email address',
-                        pointing: 'below',
-                    }}
-                />
-                <FormField
-                    id='form-button-control-public'
-                    control={Button}
-                    content='Confirm'
-                    label='Label with htmlFor'
-                />
-
-                <Message
-                    success
-                    header='Form Completed'
-                    content="You're all signed up for the newsletter"
-                />
-            </Form>
+                </ModalActions>
+            </Modal>
         </div>
     );
 }
