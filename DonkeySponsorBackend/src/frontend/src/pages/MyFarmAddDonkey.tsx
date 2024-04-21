@@ -37,7 +37,9 @@ export default function MyFarmAddDonkey(props: MyFarmAddDonkeyProps) {
         setName(data.value);
     }
 
-    const handleImageChange = (e:any) => { setImage(e) };
+    const handleImageChange = (e:any) => {
+        setImage(e.target.files[0]);
+    };
 
     const createDonkey = () => {
         const csrfToken = Cookies.get("csrftoken");
@@ -85,7 +87,7 @@ export default function MyFarmAddDonkey(props: MyFarmAddDonkeyProps) {
                             <FormInput label='Color' placeholder='Color' onChange={handleColorChange} />
                             <FormField>
                                 <label>Animal Image</label>
-                                <input type='file' onChange={handleImageChange} />
+                                <input type='file' name='animal_image' onChange={handleImageChange} />
                             </FormField>
                         </FormGroup>
                     </Form>

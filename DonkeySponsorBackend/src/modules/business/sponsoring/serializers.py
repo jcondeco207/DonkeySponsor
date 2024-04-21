@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from . import models
+import traceback
 
 class AnimalImageSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False)
@@ -16,8 +17,11 @@ class AnimalSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         try:
+            print(validated_data)
             animal_images_data = validated_data.pop('animal_image')
-        except:
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
             animal_images_data = []
             
         animal = models.Animal.objects.create(**validated_data)
