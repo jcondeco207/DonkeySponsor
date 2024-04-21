@@ -197,9 +197,6 @@ if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
     DATABASES["default"]["HOST"] = "cloudsql-proxy"
     DATABASES["default"]["PORT"] = 5432
 
-print("Databases:")
-print(DATABASES)
-
 # Password validation
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -286,5 +283,9 @@ SPECTACULAR_SETTINGS = {
 
 CSRF_COOKIE_SAMESITE = 'Strict'
 SESSION_COOKIE_SAMESITE = 'Strict'
-CSRF_COOKIE_HTTPONLY = False  # False since we will grab it via universal-cookies
+CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000/', 'https://donkeysponsor-donkey-sponsor-backend-jhszdcaqka-nw.a.run.app', 'https://*.a.run.app']
+print(CSRF_TRUSTED_ORIGINS)
