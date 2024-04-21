@@ -14,7 +14,11 @@ class AnimalSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'color', 'status', 'local', 'animal_image']
 
     def create(self, validated_data):
-        animal_images_data = validated_data.pop('animal_image')
+        try:
+            animal_images_data = validated_data.pop('animal_image')
+        except:
+            animal_images_data = []
+            
         animal = models.Animal.objects.create(**validated_data)
         for animal_image_data in animal_images_data:
             models.AnimalImage.objects.create(animal=animal, **animal_image_data)

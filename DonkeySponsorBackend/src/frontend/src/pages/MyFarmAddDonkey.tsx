@@ -27,11 +27,11 @@ export default function MyFarmAddDonkey(props: MyFarmAddDonkeyProps) {
     const [name, setName] = useState("");
     const [color, setcolor] = useState("");
 
-    const handleColorChange = (_: any, data:any) => {
+    const handleColorChange = (_: any, data: any) => {
         setcolor(data.value);
     }
 
-    const handleNameChange = (_: any, data:any) => {
+    const handleNameChange = (_: any, data: any) => {
         setName(data.value);
     }
 
@@ -39,18 +39,15 @@ export default function MyFarmAddDonkey(props: MyFarmAddDonkeyProps) {
         const csrfToken = Cookies.get("csrftoken");
         axios
             .post(`/api/animals/`, {
+                name: name,
+                color: color,
+                status: true,
+                local: props.farmId
+            }, {
                 headers: {
                     Accept: "application/json",
-                    "X-CSRFToken": String(csrfToken)
+                    "X-CSRFToken": csrfToken
                 },
-                params: {
-                    local_id: props.farmId
-                },
-                data: {
-                    name: name,
-                    color: color,
-                    status: true,
-                }
             })
             .then((response) => {
                 console.log(response)
@@ -91,7 +88,7 @@ export default function MyFarmAddDonkey(props: MyFarmAddDonkeyProps) {
                         content="Add Donkey"
                         labelPosition='right'
                         icon='checkmark'
-                        onClick={() => {createDonkey(); props.setOpen(false)}}
+                        onClick={() => { createDonkey(); props.setOpen(false) }}
                         positive
                     />
                 </ModalActions>
