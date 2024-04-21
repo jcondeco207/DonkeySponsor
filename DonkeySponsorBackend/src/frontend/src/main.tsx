@@ -14,6 +14,7 @@ import MyDonkeys from './pages/MyDonkeys.tsx';
 import Home from './pages/Home.js';
 import MyFarm from './pages/MyFarm.tsx';
 import MyFarmAddDonkey from './pages/MyFarmAddDonkey.tsx';
+import SignupForm from './pages/Signup.tsx';
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "/my_donkeys",
         element: <MyDonkeys/>,
+      },
+      {
+        path: "/signup",
+        element: <SignupForm/>,
       }
     ],
   }
