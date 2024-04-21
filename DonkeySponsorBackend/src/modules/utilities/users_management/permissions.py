@@ -30,9 +30,7 @@ class IsDonkeyOwner(permissions.BasePermission):
         donkeyId = view.kwargs.get('donkey_id', None)
         if not donkeyId:
             return False
-        
         donkey = SponsoringModels.Animal.objects.get(id=donkeyId)
-        
         return donkey.local.owner == user
 
 class SponsorsDonkey(permissions.BasePermission):

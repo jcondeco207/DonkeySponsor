@@ -61,7 +61,10 @@ class ActivitySerializer(serializers.ModelSerializer):
 
 
     def create(self, validated_data):
-        activity_images_data = validated_data.pop('activity_image')
+        try:
+            activity_images_data = validated_data.pop('activity_image')
+        except:
+            activity_images_data = []
         donkey_id = validated_data.pop('donkey_id')
         activity = models.Activity.objects.create(**validated_data)
         animal_activity = models.AnimalActivity.objects.create(animal_id=donkey_id, activity=activity)
