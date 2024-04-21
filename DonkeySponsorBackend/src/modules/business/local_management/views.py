@@ -27,7 +27,7 @@ class CreateActivity(generics.CreateAPIView):
     queryset = SponsorModels.Activity.objects.all()
     serializer_class = SponsorSerializers.ActivitySerializer
     authentication_classes = [TokenAuthentication, SessionAuthentication]
-    permission_classes = [donkeyPermissions.IsDonkeyProvider, donkeyPermissions.IsLocalOwner]
+    permission_classes = [donkeyPermissions.IsDonkeyProvider | donkeyPermissions.IsLocalOwner]
 
     def perform_create(self, serializer):
         serializer.save()
