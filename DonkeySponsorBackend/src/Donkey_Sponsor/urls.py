@@ -53,6 +53,7 @@ admin.site.site_title = "Donkey Sponsor - Admin"
 admin.site.site_header = "Donkey Sponsor - Admin"
 admin.site.index_title = "Cloud Computing - 2023/2024"
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     
@@ -72,7 +73,6 @@ urlpatterns = [
     path('api/', include('modules.business.local_management.urls')),
     path('api/', include('modules.business.sponsoring.urls')),
     path('api/', include('modules.utilities.users_management.urls')),
-
-    # React
-    re_path(r'.*', index_view, name='index'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns.append(re_path(r'.*', index_view, name='index'))
