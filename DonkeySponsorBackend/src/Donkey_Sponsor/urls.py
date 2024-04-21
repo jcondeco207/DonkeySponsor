@@ -59,9 +59,6 @@ urlpatterns = [
     # Two factor auth and sessions urls
     path('', include(tf_urls)),
     path('', include('user_sessions.urls', 'user_sessions')),
-
-    path('', include(tf_urls)),
-    path('', include('user_sessions.urls', 'user_sessions')),
     path("accounts/", include("django.contrib.auth.urls")),
     re_path(r'^favicon\.ico$', favicon, name='favicon'),
 

@@ -148,8 +148,6 @@ AXES_INCREMENTAL_TIME = 2
 AXES_FAILURE_LIMIT = 5
 SILENCED_SYSTEM_CHECKS = ['axes.W003'] # Axes dummy warning
 
-ROOT_URLCONF = "Donkey_Sponsor.urls"
-
 #==================================| Templates |==================================#
 TEMPLATES = [
     {

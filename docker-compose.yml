@@ -8,7 +8,7 @@ services:
       - ./creds.json:/secrets/cloudsql/creds.json
     ports:
       - 127.0.0.1:5432:5432
-    command: /cloud_sql_proxy -instances="western-trees-420819:europe-west2:trial"=tcp:0.0.0.0:5432 -credential_file=/secrets/cloudsql/creds.json
+    command: /cloud_sql_proxy -instances="cctrab01-420214:europe-west2:cctrab01-database"=tcp:0.0.0.0:5432 -credential_file=/secrets/cloudsql/creds.json
     restart: always
     networks:
       - donkey_sponsor_network

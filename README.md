@@ -71,8 +71,23 @@ gcloud secrets versions add django_app_settings --data-file .env.prod
 3. Set the policies for the service account
 ```shell
 gcloud secrets add-iam-policy-binding django_app_settings \
-    --member serviceAccount:249042774616@cloudbuild.gserviceaccount.com \
+    --member serviceAccount:617101494691-compute@developer.gserviceaccount.com \
     --role roles/secretmanager.secretAccessor
+```
+
+### Cloud Run CLI CheatSheet
+
+
+1. List projects
+
+```shell
+gcloud projects list
+```
+
+2. Set current project
+
+```shell
+gcloud config set project <PROJECT_ID>
 ```
 
 ### Cloud Run
@@ -97,3 +112,22 @@ docker push jrcondeco/donkeysponsor-donkey_sponsor_backend:latest
 3. Setup cloud run service (specify port 8000 and give a delay of 240s for the probe check)
 
 4. Pray
+
+
+### Things I had to do
+
+1. Criar uma instância de CloudSQL
+    - Criar a instância
+    - Criar a DB
+    - Criar user
+
+2. Gerar keys no IAMADMIN
+    - Ir às contas de serviço e gerar keys em json
+
+3. Criar um Bucket
+
+4. Criar um Secrets Manager e guardar lá os secrets
+
+5. Enable CLOUD SQL Admin
+
+https://medium.com/@rahulxsharma/django-on-google-cloud-run-3f2f93ae0917
