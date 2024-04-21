@@ -13,7 +13,6 @@ import Donkeys from './pages/Donkeys.tsx';
 import MyDonkeys from './pages/MyDonkeys.tsx';
 import Home from './pages/Home.js';
 import MyFarm from './pages/MyFarm.tsx';
-import MyFarmAddDonkey from './pages/MyFarmAddDonkey.tsx';
 import SignupForm from './pages/Signup.tsx';
 
 const router = createBrowserRouter([
@@ -32,10 +31,6 @@ const router = createBrowserRouter([
       {
         path: "/my-farm",
         element: <MyFarm/>,
-      },
-      {
-        path: "/my-farm/add-donkey",
-        element: <MyFarmAddDonkey/>,
       },
       {
         path: "/my-farm/publish-activity",
