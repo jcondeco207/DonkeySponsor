@@ -111,7 +111,7 @@ export default function Donkeys() {
     useEffect(() => {
         const csrfToken = Cookies.get("csrftoken");
         axios
-            .get(`/api/animals/`, {
+            .get(`/api/animals/sponsored`, {
                 headers: {
                     Accept: "application/json",
                     "X-CSRFToken": String(csrfToken)
@@ -140,7 +140,7 @@ export default function Donkeys() {
         }
 
         axios
-            .get(`/api/animals/`, {
+            .get(`/api/animals/sponsored`, {
                 headers: {
                     Accept: "application/json",
                     "X-CSRFToken": String(csrfToken)
@@ -179,7 +179,7 @@ export default function Donkeys() {
                 <ItemGroup>
                     {page.map((donkey) => (
                         <Card>
-                            <Image src={donkey.animal_image.length > 0 ? String(donkey.animal_image[0].image) : ""} wrapped ui={false} />
+                            <Image src={(donkey.animal_image && donkey.animal_image.length) > 0 ? String(donkey.animal_image[0].image) : ""} wrapped ui={false} />
                             <CardContent header={donkey.name} />
                             <CardContent description={donkey.color} />
                             <CardContent extra>

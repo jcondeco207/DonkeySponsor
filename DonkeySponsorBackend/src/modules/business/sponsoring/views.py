@@ -50,16 +50,16 @@ class AnimalDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [TokenAuthentication, SessionAuthentication]
 
 @extend_schema(tags=["API - Sponsoring"])
-class SponsoredDonkeys(generics.ListAPIView):
+class SponsoredDonkeysList(generics.ListAPIView):
     queryset = models.Animal.objects.all()
     serializer_class = serializers.AnimalSerializer
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request
+        user = self.request.user
         sponsoredIds = models.DonkeyOfSponsor.objects.filter(user=user).values_list('animal', flat=True)
-        queryset = models.Animal.filter(id__in=sponsoredIds)
+        queryset = models.Animal.objects.filter(id__in=sponsoredIds)
         return queryset
 
 @extend_schema(tags=["API - Sponsoring"])  
@@ -81,7 +81,6 @@ class NotMyDonkeys(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        print(user)
         sponsoredIds = models.DonkeyOfSponsor.objects.filter(user=user).values_list('animal', flat=True)
         return models.Animal.objects.exclude(id__in=sponsoredIds)
     
