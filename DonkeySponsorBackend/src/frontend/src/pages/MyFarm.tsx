@@ -19,6 +19,8 @@ import {
     Pagination,
 } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
+import '../css/MyFarm.css'
+import MyFarmAddDonkey from "./MyFarmAddDonkey";
 
 // type Local = {
 //     id: string,
@@ -65,9 +67,11 @@ export default function MyFarm() {
     const [myFarmActivities, setMyFarmActivities] = useState<Activity[]>([]);
     const [numberOfDonkeys, setNumberOfDonkeys] = useState(0);
     const [numberOfActivities, setNumberOfActivities] = useState(0);
-    // const [donkeysActivePage, setDonkeysActivePage] = useState(1);
-    // const [activitiesActivePage, setActivitiesActivePage] = useState(1);
+    const [donkeysActivePage, setDonkeysActivePage] = useState(1);
+    const [activitiesActivePage, setActivitiesActivePage] = useState(1);
     const itemPerPage = 5;
+
+    const [openAddDonkey, setOpenAddDonkeys] = useState(false);
 
     useEffect(() => {
         const csrfToken = Cookies.get("csrftoken");
@@ -130,30 +134,102 @@ export default function MyFarm() {
             });
     }, []);
 
+
+    useEffect(() => {
+        var offset = donkeysActivePage * itemPerPage;
+        if (offset > numberOfDonkeys - 1) {
+            offset = numberOfDonkeys - 1
+        }
+
+        const csrfToken = Cookies.get("csrftoken");
+        axios
+            .get(`/api/animals/`, {
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRFToken": String(csrfToken)
+                },
+                params: {
+                    local_id: myFarmId,
+                    limit: itemPerPage,
+                    offset: offset
+                }
+            })
+            .then((response) => {
+                console.log(response)
+                setMyFarmDonkeys(response.data.results);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    }, [donkeysActivePage]);
+
+    useEffect(() => {
+        var offset = activitiesActivePage * itemPerPage;
+        if (offset > numberOfActivities - 1) {
+            offset = numberOfActivities - 1
+        }
+
+        const csrfToken = Cookies.get("csrftoken");
+        axios
+            .get(`/api/activities/`, {
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRFToken": String(csrfToken)
+                },
+                params: {
+                    local_id: myFarmId,
+                    limit: itemPerPage,
+                    offset: offset
+                }
+            })
+            .then((response) => {
+                console.log(response)
+                setMyFarmActivities(response.data.results);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [activitiesActivePage])
+
+    const handleDonkeysPageChange = (_: any, data: any) => {
+        setDonkeysActivePage(data.activePage);
+    }
+
+    const handleActivitiesPageChange = (_: any, data: any) => {
+        setActivitiesActivePage(data.activePage);
+    }
+
     return (
         <div>
             <Header as='h2'>
                 <Icon name='home' />
                 <HeaderContent>My Farm</HeaderContent>
             </Header>
-            <div>
-                <Button animated>
-                    <ButtonContent visible>Add Donkey</ButtonContent>
-                    <ButtonContent hidden>
-                        <Icon name='arrow right' />
-                    </ButtonContent>
-                </Button>
-                <Button animated>
-                    <ButtonContent visible>Publish Activity</ButtonContent>
-                    <ButtonContent hidden>
-                        <Icon name='arrow right' />
-                    </ButtonContent>
-                </Button>
-            </div>
-
             <Grid divided='vertically'>
                 <GridRow columns={2}>
                     <GridColumn>
+                        <MyFarmAddDonkey farmId={myFarmId} open={openAddDonkey} setOpen={setOpenAddDonkeys} />
+                    </GridColumn>
+                    <GridColumn>
+                        <Button animated>
+                            <ButtonContent visible>Publish Activity</ButtonContent>
+                            <ButtonContent hidden>
+                                <Icon name='arrow right' />
+                            </ButtonContent>
+                        </Button>
+                    </GridColumn>
+                </GridRow>
+            </Grid>
+
+
+
+            <Grid divided='vertically' className="myFarmLists">
+                <GridRow columns={2}>
+                    <GridColumn>
+                        <Header as='h2'>
+                            <HeaderContent>My Farm Donkeys</HeaderContent>
+                        </Header>
                         <ItemGroup>
                             {myFarmDonkeys.map((donkey) => (
                                 <Item>
@@ -169,6 +245,8 @@ export default function MyFarm() {
 
                         <Pagination
                             boundaryRange={0}
+                            activePage={donkeysActivePage}
+                            onPageChange={handleDonkeysPageChange}
                             defaultActivePage={1}
                             ellipsisItem={null}
                             firstItem={null}
@@ -178,6 +256,9 @@ export default function MyFarm() {
                         />
                     </GridColumn>
                     <GridColumn>
+                        <Header as='h2'>
+                            <HeaderContent>My Farm Donkeys</HeaderContent>
+                        </Header>
                         <ItemGroup>
                             {myFarmActivities.map((activity) => (
                                 <Item>
@@ -194,6 +275,7 @@ export default function MyFarm() {
                         <Pagination
                             boundaryRange={0}
                             defaultActivePage={1}
+                            onPageChange={handleActivitiesPageChange}
                             ellipsisItem={null}
                             firstItem={null}
                             lastItem={null}
