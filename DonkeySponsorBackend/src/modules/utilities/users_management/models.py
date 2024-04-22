@@ -72,3 +72,17 @@ class User(AbstractUser):
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
     objects = CustomUserManager()
+
+class Notification(models.Model):
+    id = models.UUIDField(  primary_key=True,
+                            unique=True,
+                            default=uuid.uuid4,
+                            editable=False)
+    
+    content = models.CharField(default="")
+    seen = models.BooleanField(default=False)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(    AUTH_USER_MODEL,
+                                        related_name='notifications',
+                                        on_delete=models.CASCADE,
+                                        null=True )

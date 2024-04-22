@@ -17,8 +17,8 @@ from . import serializers as usersSerializers
 from knox.auth import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, status, generics
-from .models import MustReset, User, Role
-from .serializers import RoleSerializer, UserSerializer, CreateUserSerializer
+from .models import MustReset, User, Role, Notification
+from .serializers import RoleSerializer, UserSerializer, CreateUserSerializer, NotificationsSerializer
 from . import permissions as usersPermissions
 
 # Methods to reenable users blocked by axes
@@ -296,4 +296,41 @@ class ChangeUserState(APIView):
 
             return Response({'is_active': user.is_active}, status=status.HTTP_200_OK)
         except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@extend_schema(tags=["Manage - Users"])
+class NotificationsList(generics.ListCreateAPIView):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationsSerializer
+    permission_classes = [ permissions.IsAuthenticated ]
+    authentication_classes = [TokenAuthentication, authentication.SessionAuthentication]
+    filter_backends = [filters.SearchFilter]
+
+    def get_queryset(self):
+        # Retrieve relevant information
+        user = self.request.user
+        queryset = Notification.objects.filter(user=user, seen=False)
+        return queryset
+    
+
+@extend_schema(tags=["Manage - Users"])
+class CheckNotification(APIView):
+    queryset = Notification.objects.all()
+    permission_classes = [ permissions.IsAuthenticated ]
+    authentication_classes = [TokenAuthentication, authentication.SessionAuthentication]
+    filter_backends = [filters.SearchFilter]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            id = kwargs.get('id')
+            # Get the created user
+            notification = Notification.objects.get(pk=id)
+            if not notification.seen:
+                notification.seen = True
+                notification.save()
+            return Response({'ok': "updated"}, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            print(e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
