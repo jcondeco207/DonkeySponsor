@@ -30,4 +30,5 @@ class CreateActivity(generics.CreateAPIView):
     permission_classes = [donkeyPermissions.IsDonkeyProvider | donkeyPermissions.IsLocalOwner]
 
     def perform_create(self, serializer):
+        print(self.request.user.role.name)
         serializer.save()

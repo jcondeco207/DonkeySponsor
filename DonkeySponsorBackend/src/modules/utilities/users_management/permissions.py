@@ -16,6 +16,7 @@ class IsDonkeyGodFather(permissions.BasePermission):
     
 class IsDonkeyProvider(permissions.BasePermission):
     def has_permission(self, request, view):
+        print(request.user.role.name)
         user = request.user
         return user.role.name == 'DonkeyProvider'
 
