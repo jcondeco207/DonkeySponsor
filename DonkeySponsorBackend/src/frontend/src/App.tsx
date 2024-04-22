@@ -22,7 +22,7 @@ export default function App() {
       })
       .then((response) => {
         setUserRole(response.data.role);
-        console.log(response)
+        // console.log(response)
       })
       .catch((error) => {
         console.log(error);

@@ -14,7 +14,7 @@ import {
     ItemContent,
     ItemHeader,
     ItemDescription,
-    Pagination,
+    // Pagination,
 } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import '../css/MyFarm.css'
@@ -65,11 +65,6 @@ export default function MyFarm() {
     const [myFarmId, setMyFarmId] = useState("");
     const [myFarmDonkeys, setMyFarmDonkeys] = useState<Donkey[]>([]);
     const [myFarmActivities, setMyFarmActivities] = useState<Activity[]>([]);
-    const [numberOfDonkeys, setNumberOfDonkeys] = useState(0);
-    const [numberOfActivities, setNumberOfActivities] = useState(0);
-    const [donkeysActivePage, setDonkeysActivePage] = useState(1);
-    const [activitiesActivePage, setActivitiesActivePage] = useState(1);
-    const itemPerPage = 1;
 
     const [openAddDonkey, setOpenAddDonkeys] = useState(false);
     const [openPublishActivity, setOpenPublishActivity] = useState(false);
@@ -85,9 +80,10 @@ export default function MyFarm() {
                 }
             })
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 setMyFarmId(response.data.locals[0].id);
                 farmId = response.data.locals[0].id;
+                console.log(farmId)
             })
             .catch((error) => {
                 console.log(error);
@@ -101,13 +97,11 @@ export default function MyFarm() {
                 },
                 params: {
                     local_id: farmId,
-                    limit: itemPerPage
                 }
             })
             .then((response) => {
                 console.log(response)
                 setMyFarmDonkeys(response.data.results);
-                setNumberOfDonkeys(response.data.count);
                 console.log(myFarmId)
             })
             .catch((error) => {
@@ -122,13 +116,11 @@ export default function MyFarm() {
                 },
                 params: {
                     local_id: farmId,
-                    limit: itemPerPage
                 }
             })
             .then((response) => {
                 console.log(response)
                 setMyFarmActivities(response.data.results);
-                setNumberOfActivities(response.data.count);
             })
             .catch((error) => {
                 console.log(error);
@@ -136,70 +128,75 @@ export default function MyFarm() {
     }, []);
 
 
-    useEffect(() => {
-        var offset = donkeysActivePage * itemPerPage;
-        if (offset > numberOfDonkeys - 1) {
-            offset = numberOfDonkeys - 1
-        }
+    // useEffect(() => {
+    //     var offset = donkeysActivePage * itemPerPage;
+    //     if (offset > numberOfDonkeys - 1) {
+    //         offset = numberOfDonkeys - 1
+    //     }else if (donkeysActivePage==1){
+    //         offset= 0;
+    //     }
 
-        const csrfToken = Cookies.get("csrftoken");
-        axios
-            .get(`/api/animals/`, {
-                headers: {
-                    Accept: "application/json",
-                    "X-CSRFToken": String(csrfToken)
-                },
-                params: {
-                    local_id: myFarmId,
-                    limit: itemPerPage,
-                    offset: offset
-                }
-            })
-            .then((response) => {
-                console.log(response)
-                setMyFarmDonkeys(response.data.results);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+    //     const csrfToken = Cookies.get("csrftoken");
+    //     axios
+    //         .get(`/api/animals/`, {
+    //             headers: {
+    //                 Accept: "application/json",
+    //                 "X-CSRFToken": String(csrfToken)
+    //             },
+    //             params: {
+    //                 local_id: myFarmId,
+    //                 limit: itemPerPage,
+    //                 offset: offset
+    //             }
+    //         })
+    //         .then((response) => {
+    //             console.log(response)
+    //             setMyFarmDonkeys(response.data.results);
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
 
-    }, [donkeysActivePage]);
+    // }, [donkeysActivePage]);
 
-    useEffect(() => {
-        var offset = activitiesActivePage * itemPerPage;
-        if (offset > numberOfActivities - 1) {
-            offset = numberOfActivities - 1
-        }
+    // useEffect(() => {
+    //     var offset = activitiesActivePage * itemPerPage;
+    //     if (offset > numberOfActivities - 1) {
+    //         offset = numberOfActivities - 1
+    //     }else if (activitiesActivePage==1){
+    //         offset= 0;
+    //     }
 
-        const csrfToken = Cookies.get("csrftoken");
-        axios
-            .get(`/api/activities/`, {
-                headers: {
-                    Accept: "application/json",
-                    "X-CSRFToken": String(csrfToken)
-                },
-                params: {
-                    local_id: myFarmId,
-                    limit: itemPerPage,
-                    offset: offset
-                }
-            })
-            .then((response) => {
-                console.log(response)
-                setMyFarmActivities(response.data.results);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [activitiesActivePage])
+    //     const csrfToken = Cookies.get("csrftoken");
+    //     axios
+    //         .get(`/api/activities/`, {
+    //             headers: {
+    //                 Accept: "application/json",
+    //                 "X-CSRFToken": String(csrfToken)
+    //             },
+    //             params: {
+    //                 local_id: myFarmId,
+    //                 limit: itemPerPage,
+    //                 offset: offset
+    //             }
+    //         })
+    //         .then((response) => {
+    //             console.log("page request")
+    //             console.log(response)
+    //             setMyFarmActivities(response.data.results);
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }, [activitiesActivePage])
 
-    const handleDonkeysPageChange = (_: any, data: any) => {
-        setDonkeysActivePage(data.activePage);
-    }
+    // const handleDonkeysPageChange = (_: any, data: any) => {
+    //     setDonkeysActivePage(data.activePage);
+    // }
 
-    const handleActivitiesPageChange = (_: any, data: any) => {
-        setActivitiesActivePage(data.activePage);
-    }
+    // const handleActivitiesPageChange = (_: any, data: any) => {
+    //     setActivitiesActivePage(data.activePage);
+    // }
 
     return (
         <div>
@@ -237,7 +234,7 @@ export default function MyFarm() {
                             ))}
                         </ItemGroup>
 
-                        <Pagination
+                        {/* <Pagination
                             boundaryRange={0}
                             activePage={donkeysActivePage}
                             onPageChange={handleDonkeysPageChange}
@@ -247,7 +244,7 @@ export default function MyFarm() {
                             lastItem={null}
                             siblingRange={1}
                             totalPages={Math.ceil(numberOfDonkeys / itemPerPage)}
-                        />
+                        /> */}
                     </GridColumn>
                     <GridColumn>
                         <Header as='h2'>
@@ -266,7 +263,7 @@ export default function MyFarm() {
                             ))}
                         </ItemGroup>
 
-                        <Pagination
+                        {/* <Pagination
                             boundaryRange={0}
                             defaultActivePage={1}
                             onPageChange={handleActivitiesPageChange}
@@ -275,7 +272,7 @@ export default function MyFarm() {
                             lastItem={null}
                             siblingRange={1}
                             totalPages={Math.ceil(numberOfActivities / itemPerPage)}
-                        />
+                        /> */}
                     </GridColumn>
                 </GridRow>
             </Grid>
