@@ -29,30 +29,43 @@ export default function DonkeyMenu() {
             <MenuItem
                 name='farms'
                 active={activeItem === 'farms'}
-                onClick={() => {handleItemClick('farms'); navigate(`/farms`)}}
+                onClick={() => { handleItemClick('farms'); navigate(`/farms`) }}
             />
-            <MenuItem
-                name='My Farm'
-                active={activeItem === 'My Farm'}
-                onClick={() => {handleItemClick('My Farm'); navigate(`/my-farm`)}}
-            />
+            <Guard requiredRoles={["DonkeyAdmin", "DonkeyProvider"]} guardService={guardService}>
+                <MenuItem
+                    name='My Farm'
+                    active={activeItem === 'My Farm'}
+                    onClick={() => { handleItemClick('My Farm'); navigate(`/my-farm`) }}
+                />
+            </Guard>
+
             <MenuItem
                 name='Donkeys'
                 active={activeItem === 'Donkeys'}
                 onClick={() => { handleItemClick('Donkeys'); navigate(`/donkeys`) }}
             />
+
+            <Guard requiredRoles={["DonkeyAdmin", "DonkeySponsor"]} guardService={guardService}>
+                <MenuItem
+                    name='My donkeys'
+                    active={activeItem === 'My donkeys'}
+                    onClick={() => { handleItemClick('My donkeys'); navigate(`my_donkeys`) }}
+                />
+            </Guard>
+
             <MenuItem
-                name='My donkeys'
-                active={activeItem === 'My donkeys'}
-                onClick={() => {handleItemClick('My donkeys'); navigate(`my_donkeys`)}}
+                name='Notifications'
+                active={activeItem === 'My notifications'}
+                onClick={() => { handleItemClick('My notifications'); navigate(`/my_notifications`) }}
             />
+
 
             <MenuMenu position='right'>
                 <MenuItem>
                     <Button primary onClick={() => { handleItemClick('Sign Up'); navigate(`signup`) }} >Sign Up</Button>
                 </MenuItem>
                 <MenuItem>
-                    <Button primary onClick={() => {handleItemClick('Login'); navigate(`/account/login/`)}} >Login</Button>
+                    <Button primary onClick={() => { handleItemClick('Login'); navigate(`/account/login/`) }} >Login</Button>
                 </MenuItem>
             </MenuMenu>
         </Menu>
