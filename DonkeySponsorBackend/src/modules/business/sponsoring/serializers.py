@@ -54,6 +54,8 @@ class ActivityImageSerializer(serializers.ModelSerializer):
 class ActivitySerializer(serializers.ModelSerializer):
     activity_image = ActivityImageSerializer(many=True, required=False)
     donkey_id = serializers.UUIDField(write_only=True)
+    description = serializers.CharField(required=False)
+    status = serializers.CharField(required=False)
 
     class Meta:
         model = models.Activity
