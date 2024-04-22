@@ -6,9 +6,12 @@ import {
     Menu,
 } from 'semantic-ui-react';
 import { useNavigate } from "react-router-dom";
+import { Guard } from '../../Guard';
+import SimpleGuard from '../../SimpleGuard';
 
 export default function DonkeyMenu() {
     const navigate = useNavigate();
+    const guardService = new SimpleGuard();
 
     const [activeItem, setActiveItem] = useState("home");
 
@@ -26,12 +29,12 @@ export default function DonkeyMenu() {
             <MenuItem
                 name='farms'
                 active={activeItem === 'farms'}
-                onClick={() => { handleItemClick('farms'); navigate(`/farms`) }}
+                onClick={() => {handleItemClick('farms'); navigate(`/farms`)}}
             />
             <MenuItem
                 name='My Farm'
                 active={activeItem === 'My Farm'}
-                onClick={() => { handleItemClick('My Farm'); navigate(`/my-farm`) }}
+                onClick={() => {handleItemClick('My Farm'); navigate(`/my-farm`)}}
             />
             <MenuItem
                 name='Donkeys'
@@ -41,13 +44,7 @@ export default function DonkeyMenu() {
             <MenuItem
                 name='My donkeys'
                 active={activeItem === 'My donkeys'}
-                onClick={() => { handleItemClick('My donkeys'); navigate(`my_donkeys`) }}
-            />
-
-            <MenuItem
-                name='Notifications'
-                active={activeItem === 'My notifications'}
-                onClick={() => { handleItemClick('My notifications'); navigate(`/my_notifications`) }}
+                onClick={() => {handleItemClick('My donkeys'); navigate(`my_donkeys`)}}
             />
 
             <MenuMenu position='right'>
@@ -55,7 +52,7 @@ export default function DonkeyMenu() {
                     <Button primary onClick={() => { handleItemClick('Sign Up'); navigate(`signup`) }} >Sign Up</Button>
                 </MenuItem>
                 <MenuItem>
-                    <Button primary onClick={() => { handleItemClick('Login'); navigate(`/account/login/`) }} >Login</Button>
+                    <Button primary onClick={() => {handleItemClick('Login'); navigate(`/account/login/`)}} >Login</Button>
                 </MenuItem>
             </MenuMenu>
         </Menu>
