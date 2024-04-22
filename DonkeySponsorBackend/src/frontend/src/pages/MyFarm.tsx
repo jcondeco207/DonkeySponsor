@@ -18,8 +18,8 @@ import {
 } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import '../css/MyFarm.css'
-import MyFarmAddDonkey from "./MyFarmAddDonkey";
-import MyFarmPublishActivity from "./MyFarmPublishActivity";
+import MyFarmAddDonkey from "./components/MyFarmAddDonkey";
+import MyFarmPublishActivity from "./components/MyFarmPublishActivity";
 
 // type Local = {
 //     id: string,
