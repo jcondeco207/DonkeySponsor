@@ -5,7 +5,7 @@ import React from 'react'
 
 import {
     Visibility,
-    ItemGroup,
+    Grid,
     Header,
     HeaderContent,
     Icon,
@@ -176,9 +176,9 @@ export default function Donkeys() {
                     <Icon name='home' />
                     <HeaderContent>My Sponsored Donkeys</HeaderContent>
                 </Header>
-                <ItemGroup>
+                <Grid style={{ marginTop: "1em" }} columns='three' divided>
                     {page.map((donkey) => (
-                        <Card>
+                        <Card style={{ marginInline: "1em" }}>
                             <Image src={(donkey.animal_image && donkey.animal_image.length) > 0 ? String(donkey.animal_image[0].image) : ""} wrapped ui={false} />
                             <CardContent header={donkey.name} />
                             <CardContent description={donkey.color} />
@@ -237,7 +237,7 @@ export default function Donkeys() {
                             </CardContent>
                         </Card>
                     ))}
-                </ItemGroup>
+                </Grid>
             </Visibility>
 
 
