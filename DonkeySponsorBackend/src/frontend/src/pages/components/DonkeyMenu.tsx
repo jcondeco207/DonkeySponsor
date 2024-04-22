@@ -44,6 +44,11 @@ export default function DonkeyMenu() {
                 active={activeItem === 'Donkeys'}
                 onClick={() => { handleItemClick('Donkeys'); navigate(`/donkeys`) }}
             />
+            <MenuItem
+                name='My donkeys'
+                active={activeItem === 'My donkeys'}
+                onClick={() => {handleItemClick('My donkeys'); navigate(`my_donkeys`)}}
+            />
 
             <Guard requiredRoles={["DonkeyAdmin", "DonkeySponsor"]} guardService={guardService}>
                 <MenuItem
