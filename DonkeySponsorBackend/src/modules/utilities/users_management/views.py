@@ -317,8 +317,8 @@ class NotificationsList(generics.ListCreateAPIView):
 @extend_schema(tags=["Manage - Users"])
 class CheckNotification(APIView):
     queryset = Notification.objects.all()
+    authentication_classes = [authentication.SessionAuthentication, TokenAuthentication]
     permission_classes = [ permissions.IsAuthenticated ]
-    authentication_classes = [TokenAuthentication, authentication.SessionAuthentication]
     filter_backends = [filters.SearchFilter]
 
     def post(self, request, *args, **kwargs):

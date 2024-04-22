@@ -53,12 +53,19 @@ export default function DonkeyMenu() {
                 />
             </Guard>
 
+            <MenuItem
+                name='Notifications'
+                active={activeItem === 'My notifications'}
+                onClick={() => { handleItemClick('My notifications'); navigate(`/my_notifications`) }}
+            />
+
+
             <MenuMenu position='right'>
                 <MenuItem>
                     <Button primary onClick={() => { handleItemClick('Sign Up'); navigate(`signup`) }} >Sign Up</Button>
                 </MenuItem>
                 <MenuItem>
-                    <Button primary onClick={() => { handleItemClick('Login'); navigate(`/account/login/?next=/`) }} >Login</Button>
+                    <Button primary onClick={() => { handleItemClick('Login'); navigate(`/account/login/`) }} >Login</Button>
                 </MenuItem>
             </MenuMenu>
         </Menu>
