@@ -138,10 +138,12 @@ class AllActivities(generics.ListAPIView):
         if local_id:
             local_donkeys = models.Animal.objects.filter(local_id=local_id)
             queryset = models.AnimalActivity.objects.filter(animal__in=local_donkeys).values('activity')
+            queryset = models.Activity.objects.filter(id__in=queryset)
         
         if animal_id:
             local_donkeys = models.Animal.objects.filter(local_id=local_id)
             queryset = models.AnimalActivity.objects.filter(animal_id=animal_id).values('activity')
+            queryset = models.Activity.objects.filter(id__in=queryset)
         
         return queryset
 
