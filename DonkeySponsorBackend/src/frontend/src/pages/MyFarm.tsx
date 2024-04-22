@@ -69,7 +69,7 @@ export default function MyFarm() {
     const [numberOfActivities, setNumberOfActivities] = useState(0);
     const [donkeysActivePage, setDonkeysActivePage] = useState(1);
     const [activitiesActivePage, setActivitiesActivePage] = useState(1);
-    const itemPerPage = 5;
+    const itemPerPage = 1;
 
     const [openAddDonkey, setOpenAddDonkeys] = useState(false);
     const [openPublishActivity, setOpenPublishActivity] = useState(false);
