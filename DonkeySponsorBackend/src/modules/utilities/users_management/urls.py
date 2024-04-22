@@ -11,4 +11,6 @@ urlpatterns = [
     path('users/<uuid:pk>/make_admin', views.UpgradeToAdminView.as_view()),
     path('users/<uuid:pk>/reset_password', views.ResetUserPassword.as_view()),
     path('roles', views.RolesList.as_view()),
+    path('notifications', views.NotificationsList.as_view()),
+    path('notifications/<uuid:id>/check', views.CheckNotification.as_view())
 ]

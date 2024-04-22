@@ -100,3 +100,8 @@ class RoleSerializer(serializers.ModelSerializer):
       class Meta:
             model = models.Role
             fields = ('id', 'name')
+
+class NotificationsSerializer(serializers.ModelSerializer):
+      class Meta:
+            model = models.Notification
+            fields = '__all__'
